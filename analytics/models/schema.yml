@@ -1,0 +1,25 @@
+version: 2
+
+models:
+  - name: patient_summary
+    description: One row per unified patient with visit, condition, medication, and spend rollups.
+    columns:
+      - name: golden_id
+        description: Master patient identifier shared across matched records.
+        tests:
+          - unique
+          - not_null
+  - name: condition_prevalence
+    description: Population-level prevalence of the most common conditions.
+    columns:
+      - name: code
+        description: Clinical condition code.
+      - name: patient_count
+        description: Distinct unified patients with the condition.
+  - name: readmission_risk
+    description: Utilization-driven risk grouping based on encounter frequency.
+    columns:
+      - name: golden_id
+        description: Master patient identifier shared across matched records.
+      - name: readmission_risk
+        description: Risk bucket derived from encounter counts.

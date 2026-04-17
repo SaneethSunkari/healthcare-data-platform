@@ -1,0 +1,1752 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [
+    {
+      "title": "Summary",
+      "url": "/d/patient-360-overview/patient-360-summary",
+      "type": "link",
+      "icon": "dashboard",
+      "includeVars": true,
+      "keepTime": true,
+      "targetBlank": false,
+      "asDropdown": false,
+      "tags": []
+    },
+    {
+      "title": "Meds & Allergies",
+      "url": "/d/patient-360-medications/patient-360-meds-and-allergies",
+      "type": "link",
+      "icon": "dashboard",
+      "includeVars": true,
+      "keepTime": true,
+      "targetBlank": false,
+      "asDropdown": false,
+      "tags": []
+    },
+    {
+      "title": "Labs & Vitals",
+      "url": "/d/patient-360-labs-vitals/patient-360-labs-and-vitals",
+      "type": "link",
+      "icon": "dashboard",
+      "includeVars": true,
+      "keepTime": true,
+      "targetBlank": false,
+      "asDropdown": false,
+      "tags": []
+    },
+    {
+      "title": "Problems",
+      "url": "/d/patient-360-problems/patient-360-problems",
+      "type": "link",
+      "icon": "dashboard",
+      "includeVars": true,
+      "keepTime": true,
+      "targetBlank": false,
+      "asDropdown": false,
+      "tags": []
+    },
+    {
+      "title": "Timeline",
+      "url": "/d/patient-360-timeline/patient-360-timeline",
+      "type": "link",
+      "icon": "dashboard",
+      "includeVars": true,
+      "keepTime": true,
+      "targetBlank": false,
+      "asDropdown": false,
+      "tags": []
+    },
+    {
+      "title": "Population Health Overview",
+      "url": "/d/population-health-overview/population-health-overview",
+      "type": "link",
+      "icon": "dashboard",
+      "includeVars": false,
+      "keepTime": true,
+      "targetBlank": false,
+      "asDropdown": false,
+      "tags": []
+    }
+  ],
+  "panels": [
+    {
+      "id": 1,
+      "type": "text",
+      "title": "Provider Navigation",
+      "gridPos": {
+        "h": 3,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "pluginVersion": "12.4.3",
+      "options": {
+        "content": "**Provider Workspace**  \n[Summary](/d/patient-360-overview/patient-360-summary) | [Meds & Allergies](/d/patient-360-medications/patient-360-meds-and-allergies) | [Labs & Vitals](/d/patient-360-labs-vitals/patient-360-labs-and-vitals) | [Problems](/d/patient-360-problems/patient-360-problems) | [Timeline](/d/patient-360-timeline/patient-360-timeline)  \nPaste a `golden_id` in the field above to load a patient-focused view.",
+        "mode": "markdown"
+      },
+      "transparent": true
+    },
+    {
+      "id": 2,
+      "type": "table",
+      "title": "Clinical Snapshot",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "healthcare-postgres"
+      },
+      "pluginVersion": "12.4.3",
+      "gridPos": {
+        "h": 4,
+        "w": 24,
+        "x": 0,
+        "y": 3
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Patient Name(s)"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 220
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Readmission Risk"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "Active": {
+                        "text": "Active",
+                        "color": "green"
+                      },
+                      "Completed": {
+                        "text": "Completed",
+                        "color": "blue"
+                      },
+                      "Confirmed": {
+                        "text": "Confirmed",
+                        "color": "green"
+                      },
+                      "Final": {
+                        "text": "Final",
+                        "color": "green"
+                      },
+                      "High": {
+                        "text": "High",
+                        "color": "red"
+                      },
+                      "Medium": {
+                        "text": "Medium",
+                        "color": "yellow"
+                      },
+                      "Low": {
+                        "text": "Low",
+                        "color": "green"
+                      },
+                      "Historical": {
+                        "text": "Historical",
+                        "color": "blue"
+                      },
+                      "Review Needed": {
+                        "text": "Review",
+                        "color": "yellow"
+                      },
+                      "Unique Record": {
+                        "text": "Unique",
+                        "color": "blue"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "custom.width",
+                "value": 120
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "cellHeight": "md",
+        "showHeader": true,
+        "footer": {
+          "show": false,
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ]
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "healthcare-postgres"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "select p.golden_id as \"Golden ID\", string_agg(distinct trim(concat_ws(' ', p.first_name, p.last_name)), ' | ' order by trim(concat_ws(' ', p.first_name, p.last_name))) as \"Patient Name(s)\", min(p.birth_date)::date as \"Birth Date\", max(date_part('year', age(p.birth_date)))::int as \"Age\", max(p.gender) as \"Gender\", string_agg(distinct p.zip_code, ', ' order by p.zip_code) as \"ZIP Codes\", string_agg(distinct p.source_system, ', ' order by p.source_system) as \"Source Systems\", count(distinct p.id) as \"Linked Records\", coalesce((select rr.readmission_risk from analytics.readmission_risk rr where rr.golden_id = p.golden_id limit 1), 'low') as \"Readmission Risk\", max(e.start_date)::date as \"Last Visit Date\" from patients p left join encounters e on e.patient_id = p.id where p.golden_id = '${golden_id}' group by p.golden_id;",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "type": "table",
+      "title": "Emergency Snapshot",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "healthcare-postgres"
+      },
+      "pluginVersion": "12.4.3",
+      "gridPos": {
+        "h": 5,
+        "w": 24,
+        "x": 0,
+        "y": 7
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Blood Type"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 180
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Allergy Summary"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 300
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Penicillin Allergy"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "Yes": {
+                        "text": "Yes",
+                        "color": "red"
+                      },
+                      "No": {
+                        "text": "No",
+                        "color": "green"
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "High Safety Alerts"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 120
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Last Provider"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 220
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Last Encounter Type"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 220
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Acute Visits (90d)"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 120
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ED Visits (90d)"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 100
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "cellHeight": "md",
+        "showHeader": true,
+        "footer": {
+          "show": false,
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ]
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "healthcare-postgres"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "with blood_type as (\n    select\n        coalesce(\n            nullif(o.value_text, ''),\n            trim(concat(coalesce(o.value_numeric::text, ''), ' ', coalesce(o.value_unit, '')))\n        ) as blood_type,\n        coalesce(o.effective_at, o.issued_at) as observed_at\n    from observations o\n    join patients p on p.id = o.patient_id\n    where p.golden_id = '${golden_id}'\n      and (\n        coalesce(o.description, '') ~* '(blood group|blood type|rhesus)'\n        or coalesce(o.code, '') ~* '(ABO|RH)'\n      )\n    order by coalesce(o.effective_at, o.issued_at) desc nulls last\n    limit 1\n),\nallergy_rollup as (\n    select\n        count(*) as active_allergy_count,\n        count(*) filter (where lower(coalesce(a.description, a.code, '')) ~* 'penicillin') as penicillin_allergy_count,\n        string_agg(distinct coalesce(a.description, a.code), '; ' order by coalesce(a.description, a.code)) as allergy_summary\n    from allergies a\n    join patients p on p.id = a.patient_id\n    where p.golden_id = '${golden_id}'\n      and coalesce(a.clinical_status, 'active') = 'active'\n),\nmed_rollup as (\n    select count(distinct nullif(trim(coalesce(m.description, m.code)), '')) as current_med_count\n    from medications m\n    join patients p on p.id = m.patient_id\n    where p.golden_id = '${golden_id}'\n      and nullif(trim(coalesce(m.description, m.code)), '') is not null\n      and (\n        coalesce(m.status, 'active') not in ('stopped', 'cancelled', 'entered-in-error')\n        or m.stop_date is null\n        or m.stop_date >= current_date\n      )\n),\nrecent_encounter as (\n    select\n        e.start_date::date as last_encounter_date,\n        coalesce(e.provider, 'Unknown') as last_provider,\n        coalesce(e.encounter_type, 'Encounter') as last_encounter_type\n    from encounters e\n    join patients p on p.id = e.patient_id\n    where p.golden_id = '${golden_id}'\n    order by e.start_date desc nulls last\n    limit 1\n),\nsafety_rollup as (\n    with active_meds as (\n        select distinct lower(nullif(trim(coalesce(m.description, m.code)), '')) as med_name\n        from medications m\n        join patients p on p.id = m.patient_id\n        where p.golden_id = '${golden_id}'\n          and nullif(trim(coalesce(m.description, m.code)), '') is not null\n          and (\n            coalesce(m.status, 'active') not in ('stopped', 'cancelled', 'entered-in-error')\n            or m.stop_date is null\n            or m.stop_date >= current_date\n          )\n    ),\n    active_allergies as (\n        select distinct lower(coalesce(a.description, a.code)) as allergy_name\n        from allergies a\n        join patients p on p.id = a.patient_id\n        where p.golden_id = '${golden_id}'\n          and coalesce(a.clinical_status, 'active') = 'active'\n    ),\n    med_pairs as (\n        select m1.med_name as left_med, m2.med_name as right_med\n        from active_meds m1\n        join active_meds m2 on m1.med_name < m2.med_name\n    )\n    select\n        (\n            select count(*)\n            from med_pairs\n            where (left_med ~* '\\mwarfarin\\M' and right_med ~* '(aspirin|clopidogrel|ibuprofen|naproxen)')\n               or (right_med ~* '\\mwarfarin\\M' and left_med ~* '(aspirin|clopidogrel|ibuprofen|naproxen)')\n        )\n        +\n        (\n            select count(*)\n            from med_pairs\n            where left_med ~* '(fentanyl|tramadol|hydrocodone|oxycodone|codeine|morphine)'\n              and right_med ~* '(fentanyl|tramadol|hydrocodone|oxycodone|codeine|morphine)'\n        )\n        +\n        (\n            select count(*)\n            from med_pairs\n            where left_med ~* '(simvastatin|atorvastatin|rosuvastatin|pravastatin|lovastatin)'\n              and right_med ~* '(simvastatin|atorvastatin|rosuvastatin|pravastatin|lovastatin)'\n        )\n        +\n        (\n            select count(*)\n            from med_pairs\n            where left_med ~* '(albuterol|ventolin|proair|proventil)'\n              and right_med ~* '(albuterol|ventolin|proair|proventil)'\n        )\n        +\n        (\n            select count(*)\n            from active_allergies a\n            join active_meds m on true\n            where a.allergy_name ~* 'penicillin'\n              and m.med_name ~* '(penicillin|amoxicillin|ampicillin|dicloxacillin|clavulanate)'\n        ) as high_alert_count\n),\nacute_summary as (\n    select *\n    from provider_acute_care_summary\n    where golden_id = '${golden_id}'\n)\nselect\n    coalesce((select blood_type from blood_type), 'Not documented in connected sources') as \"Blood Type\",\n    coalesce((select allergy_summary from allergy_rollup), 'None documented') as \"Allergy Summary\",\n    case when coalesce((select penicillin_allergy_count from allergy_rollup), 0) > 0 then 'Yes' else 'No' end as \"Penicillin Allergy\",\n    coalesce((select active_allergy_count from allergy_rollup), 0) as \"Active Allergies\",\n    coalesce((select current_med_count from med_rollup), 0) as \"Current Meds\",\n    coalesce((select high_alert_count from safety_rollup), 0) as \"High Safety Alerts\",\n    coalesce((select acute_visits_90d from acute_summary), 0) as \"Acute Visits (90d)\",\n    coalesce((select ed_visits_90d from acute_summary), 0) as \"ED Visits (90d)\",\n    (select last_encounter_date from recent_encounter) as \"Last Encounter\",\n    coalesce((select last_provider from recent_encounter), 'Unknown') as \"Last Provider\",\n    coalesce((select last_encounter_type from recent_encounter), 'No encounter documented') as \"Last Encounter Type\";",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "Readmission Risk",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "healthcare-postgres"
+      },
+      "pluginVersion": "12.4.3",
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 0,
+        "y": 12
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "1": {
+                  "text": "Low"
+                },
+                "2": {
+                  "text": "Medium"
+                },
+                "3": {
+                  "text": "High"
+                }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 2
+              },
+              {
+                "color": "red",
+                "value": 3
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "background_solid",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "healthcare-postgres"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "select case coalesce((select readmission_risk from analytics.readmission_risk where golden_id = '${golden_id}' limit 1), 'low') when 'high' then 3 when 'medium' then 2 else 1 end as risk_level;",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "stat",
+      "title": "Days Since Visit",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "healthcare-postgres"
+      },
+      "pluginVersion": "12.4.3",
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 4,
+        "y": 12
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "healthcare-postgres"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "select coalesce((current_date - max(e.start_date::date)), 0) as days_since_visit from encounters e join patients p on p.id = e.patient_id where p.golden_id = '${golden_id}';",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "type": "stat",
+      "title": "Visits (12m)",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "healthcare-postgres"
+      },
+      "pluginVersion": "12.4.3",
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 8,
+        "y": 12
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "healthcare-postgres"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "select count(distinct e.id) as visits_12m from encounters e join patients p on p.id = e.patient_id where p.golden_id = '${golden_id}' and e.start_date >= now() - interval '12 months';",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "type": "stat",
+      "title": "Current Meds",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "healthcare-postgres"
+      },
+      "pluginVersion": "12.4.3",
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 12,
+        "y": 12
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "healthcare-postgres"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "select count(distinct nullif(trim(coalesce(m.description, m.code)), '')) as current_med_count\nfrom medications m\njoin patients p on p.id = m.patient_id\nwhere p.golden_id = '${golden_id}'\n  and nullif(trim(coalesce(m.description, m.code)), '') is not null\n  and (\n    coalesce(m.status, 'active') not in ('stopped', 'cancelled', 'entered-in-error')\n    or m.stop_date is null\n    or m.stop_date >= current_date\n  );",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "type": "stat",
+      "title": "Active Problems",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "healthcare-postgres"
+      },
+      "pluginVersion": "12.4.3",
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 16,
+        "y": 12
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "healthcare-postgres"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "with problem_rollup as (\n    select c.description as problem, max(c.onset_date) as last_seen\n    from conditions c\n    join patients p on p.id = c.patient_id\n    where p.golden_id = '${golden_id}'\n      and c.description is not null\n      and c.description !~* '(medication review due|full-time employment|part-time employment|not in labor force|employment status|social isolation|limited social contact|received higher education|educated to high school level|has a criminal record)'\n    group by c.description\n)\nselect count(*) from problem_rollup where last_seen >= current_date - interval '24 months';",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "type": "stat",
+      "title": "Acute Care (90d)",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "healthcare-postgres"
+      },
+      "pluginVersion": "12.4.3",
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 20,
+        "y": 12
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 2
+              },
+              {
+                "color": "red",
+                "value": 4
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "healthcare-postgres"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "select coalesce((select acute_visits_90d from provider_acute_care_summary where golden_id = '${golden_id}'), 0) as acute_visits_90d;",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "type": "table",
+      "title": "Follow-up & Care Gaps",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "healthcare-postgres"
+      },
+      "pluginVersion": "12.4.3",
+      "gridPos": {
+        "h": 8,
+        "w": 10,
+        "x": 0,
+        "y": 17
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Severity"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "High": {
+                        "text": "High",
+                        "color": "red"
+                      },
+                      "Medium": {
+                        "text": "Medium",
+                        "color": "yellow"
+                      },
+                      "Low": {
+                        "text": "Low",
+                        "color": "green"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "custom.width",
+                "value": 90
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Domain"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 110
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Care Gap"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 200
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Evidence"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 160
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Suggested Action"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 240
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Due"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 100
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "cellHeight": "md",
+        "showHeader": true,
+        "footer": {
+          "show": false,
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ]
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "healthcare-postgres"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "with data as (\nselect severity as \"Severity\", domain as \"Domain\", care_gap as \"Care Gap\", evidence as \"Evidence\", suggested_action as \"Suggested Action\", due_window as \"Due\"\nfrom provider_care_gaps\nwhere golden_id = '${golden_id}'\norder by sort_order, care_gap\nlimit 12\n)\nselect * from data\nunion all\nselect 'Low', 'Stable', 'No immediate care gaps identified', NULL, NULL, NULL\nwhere not exists (select 1 from data);",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "type": "table",
+      "title": "Active Problem List",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "healthcare-postgres"
+      },
+      "pluginVersion": "12.4.3",
+      "gridPos": {
+        "h": 8,
+        "w": 14,
+        "x": 10,
+        "y": 17
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Status"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "Active": {
+                        "text": "Active",
+                        "color": "green"
+                      },
+                      "Completed": {
+                        "text": "Completed",
+                        "color": "blue"
+                      },
+                      "Confirmed": {
+                        "text": "Confirmed",
+                        "color": "green"
+                      },
+                      "Final": {
+                        "text": "Final",
+                        "color": "green"
+                      },
+                      "High": {
+                        "text": "High",
+                        "color": "red"
+                      },
+                      "Medium": {
+                        "text": "Medium",
+                        "color": "yellow"
+                      },
+                      "Low": {
+                        "text": "Low",
+                        "color": "green"
+                      },
+                      "Historical": {
+                        "text": "Historical",
+                        "color": "blue"
+                      },
+                      "Review Needed": {
+                        "text": "Review",
+                        "color": "yellow"
+                      },
+                      "Unique Record": {
+                        "text": "Unique",
+                        "color": "blue"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "custom.width",
+                "value": 90
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Problem"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 320
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "cellHeight": "md",
+        "showHeader": true,
+        "footer": {
+          "show": false,
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ]
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "healthcare-postgres"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "with data as (\nwith problem_rollup as (\n    select\n        c.description as \"Problem\",\n        case\n            when c.description ilike '%diabet%' or c.description ilike '%glucose%' or c.description ilike '%obesity%' then 'Metabolic'\n            when c.description ilike '%hypertension%' or c.description ilike '%hyperlip%' or c.description ilike '%cholesterol%' or c.description ilike '%card%' then 'Cardiovascular'\n            when c.description ilike '%bronch%' or c.description ilike '%asthma%' or c.description ilike '%copd%' or c.description ilike '%sinus%' or c.description ilike '%pharyngitis%' then 'Pulmonary/ENT'\n            when c.description ilike '%pain%' or c.description ilike '%arthritis%' or c.description ilike '%musculoskeletal%' or c.description ilike '%back%' then 'MSK/Pain'\n            when c.description ilike '%anemia%' or c.description ilike '%renal%' or c.description ilike '%kidney%' or c.description ilike '%dialysis%' then 'Renal/Heme'\n            when c.description ilike '%alcohol%' or c.description ilike '%tobacco%' or c.description ilike '%depress%' or c.description ilike '%anxiety%' or c.description ilike '%dementia%' or c.description ilike '%abuse%' or c.description ilike '%violence%' then 'Behavioral/Psychosocial'\n            else 'General Medicine'\n        end as \"Focus\",\n        case\n            when c.description ilike '%diabet%' or c.description ilike '%prediabet%' then 'Review glycemic control and medication plan.'\n            when c.description ilike '%hypertension%' then 'Check blood pressure trend and antihypertensive adherence.'\n            when c.description ilike '%hyperlip%' or c.description ilike '%cholesterol%' then 'Review lipid control and statin therapy.'\n            when c.description ilike '%anemia%' then 'Trend CBC and evaluate symptoms.'\n            when c.description ilike '%pain%' then 'Assess pain control, function, and medication burden.'\n            when c.description ilike '%dementia%' then 'Confirm caregiver support and safety planning.'\n            when c.description ilike '%abuse%' or c.description ilike '%violence%' then 'Assess safety and support needs.'\n            else 'Review with recent vitals, labs, and treatment plan.'\n        end as \"Suggested Follow-up\",\n        max(c.onset_date)::date as \"Last Seen\",\n        count(*) as \"Occurrences\",\n        case when max(c.onset_date) >= current_date - interval '24 months' then 'Active' else 'Historical' end as \"Status\"\n    from conditions c\n    join patients p on p.id = c.patient_id\n    where p.golden_id = '${golden_id}'\n      and c.description is not null\n      and c.description !~* '(medication review due|full-time employment|part-time employment|not in labor force|employment status|social isolation|limited social contact|received higher education|educated to high school level|has a criminal record)'\n    group by c.description\n)\nselect * from problem_rollup\nwhere \"Status\" = 'Active'\norder by\n    case \"Focus\" when 'Metabolic' then 0 when 'Cardiovascular' then 1 when 'Renal/Heme' then 2 else 3 end,\n    \"Last Seen\" desc nulls last,\n    \"Occurrences\" desc,\n    \"Problem\"\nlimit 20\n)\nselect * from data\nunion all\nselect 'No active clinical problems', NULL, NULL, NULL::date, NULL::bigint, NULL\nwhere not exists (select 1 from data);",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "type": "table",
+      "title": "Abnormal & Important Labs",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "healthcare-postgres"
+      },
+      "pluginVersion": "12.4.3",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 25
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Flag"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "High": {
+                        "text": "High",
+                        "color": "red"
+                      },
+                      "Low": {
+                        "text": "Low",
+                        "color": "yellow"
+                      },
+                      "Normal": {
+                        "text": "Normal",
+                        "color": "green"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "custom.width",
+                "value": 90
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Lab"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 240
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "cellHeight": "md",
+        "showHeader": true,
+        "footer": {
+          "show": false,
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ]
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "healthcare-postgres"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "with data as (\nwith latest_labs as (\n    select distinct on (coalesce(o.description, o.code))\n        o.effective_at::date as \"Collected\",\n        coalesce(o.description, o.code) as \"Lab\",\n        coalesce(nullif(o.value_text, ''), trim(concat(coalesce(o.value_numeric::text, ''), ' ', coalesce(o.value_unit, '')))) as \"Result\",\n        case\n            when coalesce(o.description, o.code) ilike 'Hemoglobin A1c%' and coalesce(o.value_numeric, 0) >= 8 then 'High'\n            when coalesce(o.description, o.code) ilike 'Hemoglobin A1c%' and coalesce(o.value_numeric, 0) >= 6.5 then 'Borderline'\n            when coalesce(o.description, o.code) ilike 'Cholesterol in LDL%' and coalesce(o.value_numeric, 0) >= 160 then 'High'\n            when coalesce(o.description, o.code) ilike 'Cholesterol in LDL%' and coalesce(o.value_numeric, 0) >= 130 then 'Borderline'\n            when coalesce(o.description, o.code) ilike 'Glomerular filtration rate%' and coalesce(o.value_numeric, 999) < 30 then 'Critical'\n            when coalesce(o.description, o.code) ilike 'Glomerular filtration rate%' and coalesce(o.value_numeric, 999) < 60 then 'High'\n            when coalesce(o.description, o.code) ilike 'Creatinine%' and coalesce(o.value_numeric, 0) >= 1.5 then 'High'\n            when coalesce(o.description, o.code) ilike 'Glucose%' and coalesce(o.value_numeric, 0) >= 200 then 'High'\n            when coalesce(o.description, o.code) ilike 'Hemoglobin%' and coalesce(o.value_numeric, 999) < 10 then 'High'\n            when coalesce(o.description, o.code) ilike 'Potassium%' and (coalesce(o.value_numeric, 4.0) < 3.5 or coalesce(o.value_numeric, 4.0) > 5.3) then 'High'\n            when coalesce(o.description, o.code) ilike 'Sodium%' and (coalesce(o.value_numeric, 140.0) < 130 or coalesce(o.value_numeric, 140.0) > 150) then 'High'\n            else 'Normal'\n        end as \"Flag\",\n        case\n            when coalesce(o.description, o.code) ilike 'Hemoglobin A1c%' then 'Diabetes control'\n            when coalesce(o.description, o.code) ilike 'Cholesterol in LDL%' then 'Cardiovascular risk'\n            when coalesce(o.description, o.code) ilike 'Glomerular filtration rate%' or coalesce(o.description, o.code) ilike 'Creatinine%' then 'Renal function'\n            when coalesce(o.description, o.code) ilike 'Glucose%' then 'Metabolic status'\n            when coalesce(o.description, o.code) ilike 'Hemoglobin%' then 'Anemia screening'\n            when coalesce(o.description, o.code) ilike 'Potassium%' or coalesce(o.description, o.code) ilike 'Sodium%' then 'Electrolytes'\n            else 'Clinical review'\n        end as \"Clinical Focus\",\n        case\n            when coalesce(o.description, o.code) ilike 'Hemoglobin A1c%' then 'Review diabetic regimen and follow-up interval.'\n            when coalesce(o.description, o.code) ilike 'Cholesterol in LDL%' then 'Review statin therapy and adherence.'\n            when coalesce(o.description, o.code) ilike 'Glomerular filtration rate%' or coalesce(o.description, o.code) ilike 'Creatinine%' then 'Review renal dosing and kidney disease monitoring.'\n            when coalesce(o.description, o.code) ilike 'Glucose%' then 'Assess acute glycemic symptoms and medications.'\n            when coalesce(o.description, o.code) ilike 'Hemoglobin%' then 'Consider anemia workup or repeat CBC.'\n            when coalesce(o.description, o.code) ilike 'Potassium%' or coalesce(o.description, o.code) ilike 'Sodium%' then 'Assess medication and fluid/electrolyte causes.'\n            else 'Review in clinical context.'\n        end as \"Suggested Follow-up\"\n    from observations o\n    join patients p on p.id = o.patient_id\n    where p.golden_id = '${golden_id}'\n      and lower(coalesce(o.category, '')) like '%laboratory%'\n      and coalesce(o.description, o.code) ~* '(Hemoglobin A1c|Cholesterol in LDL|Creatinine|Glomerular filtration rate|Glucose|Hemoglobin|Potassium|Sodium|Leukocytes|Platelets|Calcium|Carbon dioxide)'\n    order by coalesce(o.description, o.code), o.effective_at desc nulls last\n)\nselect * from latest_labs\nwhere \"Flag\" <> 'Normal'\norder by case \"Flag\" when 'Critical' then 0 when 'High' then 1 when 'Borderline' then 2 else 3 end, \"Collected\" desc nulls last, \"Lab\"\nlimit 20\n)\nselect * from data\nunion all\nselect NULL::date, 'No abnormal labs flagged', NULL, 'Normal', NULL, NULL\nwhere not exists (select 1 from data);",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "type": "table",
+      "title": "Latest Vitals",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "healthcare-postgres"
+      },
+      "pluginVersion": "12.4.3",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 25
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Flag"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "High": {
+                        "text": "High",
+                        "color": "red"
+                      },
+                      "Low": {
+                        "text": "Low",
+                        "color": "yellow"
+                      },
+                      "Normal": {
+                        "text": "Normal",
+                        "color": "green"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "custom.width",
+                "value": 90
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Vital"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 220
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "cellHeight": "md",
+        "showHeader": true,
+        "footer": {
+          "show": false,
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ]
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "healthcare-postgres"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "with data as (\nwith ranked_vitals as (\n    select distinct on (coalesce(o.description, o.code))\n        coalesce(o.description, o.code) as \"Vital\",\n        coalesce(nullif(o.value_text, ''), trim(concat(coalesce(o.value_numeric::text, ''), ' ', coalesce(o.value_unit, '')))) as \"Latest Value\",\n        case\n            when coalesce(o.description, o.code) = 'Systolic Blood Pressure' and coalesce(o.value_numeric, 0) >= 140 then 'High'\n            when coalesce(o.description, o.code) = 'Diastolic Blood Pressure' and coalesce(o.value_numeric, 0) >= 90 then 'High'\n            when coalesce(o.description, o.code) = 'Body mass index (BMI) [Ratio]' and coalesce(o.value_numeric, 0) >= 30 then 'High'\n            when coalesce(o.description, o.code) = 'Heart rate' and (coalesce(o.value_numeric, 0) >= 100 or coalesce(o.value_numeric, 999) < 50) then 'High'\n            when coalesce(o.description, o.code) = 'Body temperature' and coalesce(o.value_numeric, 0) >= 38 then 'High'\n            else 'Normal'\n        end as \"Flag\",\n        case\n            when coalesce(o.description, o.code) in ('Systolic Blood Pressure', 'Diastolic Blood Pressure') then 'Assess trend and treatment response.'\n            when coalesce(o.description, o.code) = 'Body mass index (BMI) [Ratio]' then 'Use with nutrition and activity counseling.'\n            when coalesce(o.description, o.code) = 'Heart rate' then 'Review symptoms, rhythm, and medications if persistent.'\n            when coalesce(o.description, o.code) = 'Body temperature' then 'Correlate with infection symptoms.'\n            else 'Monitor in clinical context.'\n        end as \"Clinical Note\",\n        o.effective_at::date as \"Recorded\"\n    from observations o\n    join patients p on p.id = o.patient_id\n    where p.golden_id = '${golden_id}'\n      and lower(coalesce(o.category, '')) like '%vital%'\n      and coalesce(o.description, o.code) in (\n        'Systolic Blood Pressure',\n        'Diastolic Blood Pressure',\n        'Body mass index (BMI) [Ratio]',\n        'Heart rate',\n        'Respiratory rate',\n        'Body temperature',\n        'Body Weight'\n      )\n    order by coalesce(o.description, o.code), o.effective_at desc nulls last\n)\nselect * from ranked_vitals\norder by\n    case \"Vital\"\n        when 'Systolic Blood Pressure' then 0\n        when 'Diastolic Blood Pressure' then 1\n        when 'Heart rate' then 2\n        when 'Body mass index (BMI) [Ratio]' then 3\n        when 'Body Weight' then 4\n        when 'Respiratory rate' then 5\n        when 'Body temperature' then 6\n        else 7\n    end,\n    \"Recorded\" desc nulls last\n)\nselect * from data\nunion all\nselect 'No vitals recorded', NULL, NULL, NULL, NULL::date\nwhere not exists (select 1 from data);",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "type": "table",
+      "title": "Allergy & Reaction Profile",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "healthcare-postgres"
+      },
+      "pluginVersion": "12.4.3",
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 33
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Reaction Severity"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "Severe": {
+                        "text": "Severe",
+                        "color": "red"
+                      },
+                      "Moderate": {
+                        "text": "Moderate",
+                        "color": "yellow"
+                      },
+                      "Mild": {
+                        "text": "Mild",
+                        "color": "green"
+                      },
+                      "Unknown": {
+                        "text": "Unknown",
+                        "color": "blue"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "custom.width",
+                "value": 110
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Criticality"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "High": {
+                        "text": "High",
+                        "color": "red"
+                      },
+                      "Low": {
+                        "text": "Low",
+                        "color": "yellow"
+                      },
+                      "Unable-To-Assess": {
+                        "text": "Assess",
+                        "color": "blue"
+                      },
+                      "Unknown": {
+                        "text": "Unknown",
+                        "color": "blue"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "custom.width",
+                "value": 90
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Allergy"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 180
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Reaction"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 220
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Safety Note"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 260
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "cellHeight": "md",
+        "showHeader": true,
+        "footer": {
+          "show": false,
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ]
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "healthcare-postgres"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "with data as (\nselect recorded_date::date as \"Recorded\", allergy as \"Allergy\", reaction as \"Reaction\", reaction_severity as \"Reaction Severity\", criticality as \"Criticality\", safety_note as \"Safety Note\"\nfrom provider_allergy_details\nwhere golden_id = '${golden_id}'\norder by case reaction_severity when 'Severe' then 0 when 'Moderate' then 1 when 'Mild' then 2 else 3 end, recorded_date desc nulls last, allergy\nlimit 12\n)\nselect * from data\nunion all\nselect NULL::date, 'No active allergies recorded', NULL, NULL, NULL, NULL\nwhere not exists (select 1 from data);",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "type": "table",
+      "title": "Recent Acute Care / Admissions",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "healthcare-postgres"
+      },
+      "pluginVersion": "12.4.3",
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 33
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Care Setting"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "Emergency": {
+                        "text": "Emergency",
+                        "color": "red"
+                      },
+                      "Hospital admission": {
+                        "text": "Hospital",
+                        "color": "orange"
+                      },
+                      "Urgent care": {
+                        "text": "Urgent",
+                        "color": "yellow"
+                      },
+                      "Same-day acute": {
+                        "text": "Same-day acute",
+                        "color": "blue"
+                      },
+                      "Ambulatory acute": {
+                        "text": "Ambulatory acute",
+                        "color": "green"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "custom.width",
+                "value": 120
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Encounter"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 240
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Provider"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 220
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Cost"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              },
+              {
+                "id": "custom.width",
+                "value": 90
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "cellHeight": "md",
+        "showHeader": true,
+        "footer": {
+          "show": false,
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ]
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "healthcare-postgres"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "with data as (\nselect start_date::date as \"Date\", care_setting as \"Care Setting\", encounter_type as \"Encounter\", provider as \"Provider\", cost as \"Cost\"\nfrom provider_acute_care_events\nwhere golden_id = '${golden_id}'\n  and is_acute\norder by start_date desc nulls last\nlimit 15\n)\nselect * from data\nunion all\nselect NULL::date, 'No recent acute care recorded', NULL, NULL, NULL::numeric\nwhere not exists (select 1 from data);",
+          "refId": "A"
+        }
+      ]
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 41,
+  "style": "dark",
+  "tags": [
+    "healthcare",
+    "provider",
+    "patient-360"
+  ],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "00063ef7-9c99-7c6c-cfc2-32d2ec33b7be",
+          "value": "00063ef7-9c99-7c6c-cfc2-32d2ec33b7be"
+        },
+        "description": "Paste a golden_id from the provider search or patient directory.",
+        "hide": 0,
+        "label": "Golden ID",
+        "name": "golden_id",
+        "options": [],
+        "query": "00063ef7-9c99-7c6c-cfc2-32d2ec33b7be",
+        "skipUrlSync": false,
+        "type": "textbox"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-5y",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Patient 360 Summary",
+  "uid": "patient-360-overview",
+  "version": 6
+}

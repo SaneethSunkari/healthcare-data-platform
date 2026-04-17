@@ -13,6 +13,8 @@ synthea/synthea-with-dependencies.jar
 analytics/target/
 analytics/logs/
 analytics/dbt_packages/
+analytics/.user.yml
 
 # Local dashboards and runtime data
 dashboard/data/
+logs/

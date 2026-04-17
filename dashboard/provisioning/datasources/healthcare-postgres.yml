@@ -1,0 +1,18 @@
+apiVersion: 1
+
+datasources:
+  - name: Healthcare PostgreSQL
+    uid: healthcare-postgres
+    type: postgres
+    access: proxy
+    url: postgres:5432
+    user: postgres
+    database: healthcare_db
+    isDefault: true
+    secureJsonData:
+      password: postgres
+    jsonData:
+      database: healthcare_db
+      sslmode: disable
+      postgresVersion: 1600
+      timescaledb: false

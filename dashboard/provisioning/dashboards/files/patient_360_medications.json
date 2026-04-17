@@ -1,0 +1,1189 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [
+    {
+      "title": "Summary",
+      "url": "/d/patient-360-overview/patient-360-summary",
+      "type": "link",
+      "icon": "dashboard",
+      "includeVars": true,
+      "keepTime": true,
+      "targetBlank": false,
+      "asDropdown": false,
+      "tags": []
+    },
+    {
+      "title": "Meds & Allergies",
+      "url": "/d/patient-360-medications/patient-360-meds-and-allergies",
+      "type": "link",
+      "icon": "dashboard",
+      "includeVars": true,
+      "keepTime": true,
+      "targetBlank": false,
+      "asDropdown": false,
+      "tags": []
+    },
+    {
+      "title": "Labs & Vitals",
+      "url": "/d/patient-360-labs-vitals/patient-360-labs-and-vitals",
+      "type": "link",
+      "icon": "dashboard",
+      "includeVars": true,
+      "keepTime": true,
+      "targetBlank": false,
+      "asDropdown": false,
+      "tags": []
+    },
+    {
+      "title": "Problems",
+      "url": "/d/patient-360-problems/patient-360-problems",
+      "type": "link",
+      "icon": "dashboard",
+      "includeVars": true,
+      "keepTime": true,
+      "targetBlank": false,
+      "asDropdown": false,
+      "tags": []
+    },
+    {
+      "title": "Timeline",
+      "url": "/d/patient-360-timeline/patient-360-timeline",
+      "type": "link",
+      "icon": "dashboard",
+      "includeVars": true,
+      "keepTime": true,
+      "targetBlank": false,
+      "asDropdown": false,
+      "tags": []
+    },
+    {
+      "title": "Population Health Overview",
+      "url": "/d/population-health-overview/population-health-overview",
+      "type": "link",
+      "icon": "dashboard",
+      "includeVars": false,
+      "keepTime": true,
+      "targetBlank": false,
+      "asDropdown": false,
+      "tags": []
+    }
+  ],
+  "panels": [
+    {
+      "id": 1,
+      "type": "text",
+      "title": "Provider Navigation",
+      "gridPos": {
+        "h": 3,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "pluginVersion": "12.4.3",
+      "options": {
+        "content": "**Provider Workspace**  \n[Summary](/d/patient-360-overview/patient-360-summary) | [Meds & Allergies](/d/patient-360-medications/patient-360-meds-and-allergies) | [Labs & Vitals](/d/patient-360-labs-vitals/patient-360-labs-and-vitals) | [Problems](/d/patient-360-problems/patient-360-problems) | [Timeline](/d/patient-360-timeline/patient-360-timeline)  \nPaste a `golden_id` in the field above to load a patient-focused view.",
+        "mode": "markdown"
+      },
+      "transparent": true
+    },
+    {
+      "id": 2,
+      "type": "table",
+      "title": "Clinical Snapshot",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "healthcare-postgres"
+      },
+      "pluginVersion": "12.4.3",
+      "gridPos": {
+        "h": 4,
+        "w": 24,
+        "x": 0,
+        "y": 3
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Patient Name(s)"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 220
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Readmission Risk"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "Active": {
+                        "text": "Active",
+                        "color": "green"
+                      },
+                      "Completed": {
+                        "text": "Completed",
+                        "color": "blue"
+                      },
+                      "Confirmed": {
+                        "text": "Confirmed",
+                        "color": "green"
+                      },
+                      "Final": {
+                        "text": "Final",
+                        "color": "green"
+                      },
+                      "High": {
+                        "text": "High",
+                        "color": "red"
+                      },
+                      "Medium": {
+                        "text": "Medium",
+                        "color": "yellow"
+                      },
+                      "Low": {
+                        "text": "Low",
+                        "color": "green"
+                      },
+                      "Historical": {
+                        "text": "Historical",
+                        "color": "blue"
+                      },
+                      "Review Needed": {
+                        "text": "Review",
+                        "color": "yellow"
+                      },
+                      "Unique Record": {
+                        "text": "Unique",
+                        "color": "blue"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "custom.width",
+                "value": 120
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "cellHeight": "md",
+        "showHeader": true,
+        "footer": {
+          "show": false,
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ]
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "healthcare-postgres"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "select p.golden_id as \"Golden ID\", string_agg(distinct trim(concat_ws(' ', p.first_name, p.last_name)), ' | ' order by trim(concat_ws(' ', p.first_name, p.last_name))) as \"Patient Name(s)\", min(p.birth_date)::date as \"Birth Date\", max(date_part('year', age(p.birth_date)))::int as \"Age\", max(p.gender) as \"Gender\", string_agg(distinct p.zip_code, ', ' order by p.zip_code) as \"ZIP Codes\", string_agg(distinct p.source_system, ', ' order by p.source_system) as \"Source Systems\", count(distinct p.id) as \"Linked Records\", coalesce((select rr.readmission_risk from analytics.readmission_risk rr where rr.golden_id = p.golden_id limit 1), 'low') as \"Readmission Risk\", max(e.start_date)::date as \"Last Visit Date\" from patients p left join encounters e on e.patient_id = p.id where p.golden_id = '${golden_id}' group by p.golden_id;",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "Current Meds",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "healthcare-postgres"
+      },
+      "pluginVersion": "12.4.3",
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 0,
+        "y": 7
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "healthcare-postgres"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "select count(distinct coalesce(m.description, m.code)) as current_med_count from medications m join patients p on p.id = m.patient_id where p.golden_id = '${golden_id}' and coalesce(m.description, m.code) is not null and (coalesce(m.status, 'active') not in ('stopped', 'cancelled', 'entered-in-error') or m.stop_date is null or m.stop_date >= current_date);",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "stat",
+      "title": "Active Allergies",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "healthcare-postgres"
+      },
+      "pluginVersion": "12.4.3",
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 6,
+        "y": 7
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "healthcare-postgres"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "select count(distinct a.id) from allergies a join patients p on p.id = a.patient_id where p.golden_id = '${golden_id}' and coalesce(a.clinical_status, 'active') = 'active';",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "type": "stat",
+      "title": "Active Plans",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "healthcare-postgres"
+      },
+      "pluginVersion": "12.4.3",
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 12,
+        "y": 7
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "healthcare-postgres"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "select count(distinct cp.id) as active_plan_count from care_plans cp join patients p on p.id = cp.patient_id where p.golden_id = '${golden_id}' and coalesce(cp.status, '') not in ('revoked', 'completed');",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "type": "stat",
+      "title": "Medication Alerts",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "healthcare-postgres"
+      },
+      "pluginVersion": "12.4.3",
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 18,
+        "y": 7
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "healthcare-postgres"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "with alerts as (with active_meds as (\n    select distinct\n        lower(nullif(trim(coalesce(m.description, m.code)), '')) as med_name,\n        nullif(trim(coalesce(m.description, m.code)), '') as display_name\n    from medications m\n    join patients p on p.id = m.patient_id\n    where p.golden_id = '${golden_id}'\n      and nullif(trim(coalesce(m.description, m.code)), '') is not null\n      and (\n        coalesce(m.status, 'active') not in ('stopped', 'cancelled', 'entered-in-error')\n        or m.stop_date is null\n        or m.stop_date >= current_date\n      )\n),\nactive_allergies as (\n    select distinct\n        lower(coalesce(a.description, a.code)) as allergy_name,\n        coalesce(a.description, a.code) as allergy_display\n    from allergies a\n    join patients p on p.id = a.patient_id\n    where p.golden_id = '${golden_id}'\n      and coalesce(a.clinical_status, 'active') = 'active'\n),\nmed_pairs as (\n    select\n        least(m1.display_name, m2.display_name) as med_left,\n        greatest(m1.display_name, m2.display_name) as med_right,\n        m1.med_name as left_norm,\n        m2.med_name as right_norm\n    from active_meds m1\n    join active_meds m2 on m1.display_name < m2.display_name\n)\nselect * from (\n    select\n        'High' as \"Severity\",\n        'Penicillin allergy conflict' as \"Alert\",\n        string_agg(distinct a.allergy_display || ' + ' || m.display_name, '; ' order by a.allergy_display || ' + ' || m.display_name) as \"Evidence\",\n        'Avoid penicillin-class therapy and verify alternatives before ordering.' as \"Suggested Action\"\n    from active_allergies a\n    join active_meds m on true\n    where a.allergy_name ~* 'penicillin'\n      and m.med_name ~* '(penicillin|amoxicillin|ampicillin|dicloxacillin|clavulanate)'\n    having count(*) > 0\n\n    union all\n\n    select\n        'High',\n        'Major bleeding risk',\n        string_agg(distinct med_left || ' + ' || med_right, '; ' order by med_left || ' + ' || med_right),\n        'Review anticoagulant, antiplatelet, and NSAID combination before continuing therapy.'\n    from med_pairs\n    where (left_norm ~* '\\mwarfarin\\M' and right_norm ~* '(aspirin|clopidogrel|ibuprofen|naproxen)')\n       or (right_norm ~* '\\mwarfarin\\M' and left_norm ~* '(aspirin|clopidogrel|ibuprofen|naproxen)')\n    having count(*) > 0\n\n    union all\n\n    select\n        'High',\n        'Opioid combination review',\n        string_agg(distinct med_left || ' + ' || med_right, '; ' order by med_left || ' + ' || med_right),\n        'Multiple opioid therapies are active; verify intent and overdose risk.'\n    from med_pairs\n    where left_norm ~* '(fentanyl|tramadol|hydrocodone|oxycodone|codeine|morphine)'\n      and right_norm ~* '(fentanyl|tramadol|hydrocodone|oxycodone|codeine|morphine)'\n    having count(*) > 0\n\n    union all\n\n    select\n        'Medium',\n        'Duplicate statin therapy',\n        string_agg(distinct med_left || ' + ' || med_right, '; ' order by med_left || ' + ' || med_right),\n        'Confirm only one statin regimen should remain active.'\n    from med_pairs\n    where left_norm ~* '(simvastatin|atorvastatin|rosuvastatin|pravastatin|lovastatin)'\n      and right_norm ~* '(simvastatin|atorvastatin|rosuvastatin|pravastatin|lovastatin)'\n    having count(*) > 0\n\n    union all\n\n    select\n        'Medium',\n        'Duplicate rescue inhaler review',\n        string_agg(distinct med_left || ' + ' || med_right, '; ' order by med_left || ' + ' || med_right),\n        'Multiple albuterol products are active; verify patient instructions and duplication.'\n    from med_pairs\n    where left_norm ~* '(albuterol|ventolin|proair|proventil)'\n      and right_norm ~* '(albuterol|ventolin|proair|proventil)'\n    having count(*) > 0\n) alerts) select count(*) from alerts;",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "type": "table",
+      "title": "Medication Reconciliation",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "healthcare-postgres"
+      },
+      "pluginVersion": "12.4.3",
+      "gridPos": {
+        "h": 12,
+        "w": 14,
+        "x": 0,
+        "y": 12
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Review"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "Review duplicate therapy": {
+                        "text": "Review duplicate therapy",
+                        "color": "red"
+                      },
+                      "Clarify instructions": {
+                        "text": "Clarify instructions",
+                        "color": "yellow"
+                      },
+                      "Add frequency": {
+                        "text": "Add frequency",
+                        "color": "yellow"
+                      },
+                      "Confirm prescriber": {
+                        "text": "Confirm prescriber",
+                        "color": "yellow"
+                      },
+                      "Confirm PRN indication": {
+                        "text": "Confirm PRN indication",
+                        "color": "blue"
+                      },
+                      "Confirm still active": {
+                        "text": "Confirm still active",
+                        "color": "yellow"
+                      },
+                      "Continue": {
+                        "text": "Continue",
+                        "color": "green"
+                      },
+                      "None": {
+                        "text": "None",
+                        "color": "green"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "custom.width",
+                "value": 170
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Medication"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 260
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Sig"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 220
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Prescriber"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 180
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Why"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 260
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "cellHeight": "md",
+        "showHeader": true,
+        "footer": {
+          "show": false,
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ]
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "healthcare-postgres"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "with data as (\nwith med_base as (\n    select\n        nullif(trim(coalesce(m.description, m.code)), '') as medication,\n        coalesce(nullif(trim(m.dose_details), ''), 'Dose not specified') as dose_details,\n        coalesce(nullif(trim(m.frequency), ''), 'Frequency not specified') as frequency,\n        coalesce(initcap(nullif(trim(m.route), '')), 'Route not stated') as route,\n        coalesce(nullif(trim(m.prescriber), ''), 'Prescriber not listed') as prescriber,\n        coalesce(m.as_needed, false) as as_needed,\n        m.start_date,\n        m.stop_date,\n        count(*) over (partition by nullif(trim(coalesce(m.description, m.code)), '')) as regimen_count\n    from medications m\n    join patients p on p.id = m.patient_id\n    where p.golden_id = '${golden_id}'\n      and nullif(trim(coalesce(m.description, m.code)), '') is not null\n      and (\n        coalesce(m.status, 'active') not in ('stopped', 'cancelled', 'entered-in-error')\n        or m.stop_date is null\n        or m.stop_date >= current_date\n      )\n),\nreview_rows as (\n    select distinct\n        case\n            when regimen_count > 1 then 'Review duplicate therapy'\n            when frequency = 'Frequency not specified' and dose_details = 'Dose not specified' then 'Clarify instructions'\n            when frequency = 'Frequency not specified' then 'Add frequency'\n            when prescriber = 'Prescriber not listed' then 'Confirm prescriber'\n            when as_needed then 'Confirm PRN indication'\n            when start_date is not null and start_date < current_date - interval '8 years' then 'Confirm still active'\n            else 'Continue'\n        end as \"Review\",\n        medication as \"Medication\",\n        trim(concat_ws(' | ', dose_details, frequency, route, case when as_needed then 'PRN' end)) as \"Sig\",\n        prescriber as \"Prescriber\",\n        start_date::date as \"Started\",\n        stop_date::date as \"Stops\",\n        case\n            when regimen_count > 1 then 'Multiple active rows exist for the same medication.'\n            when frequency = 'Frequency not specified' and dose_details = 'Dose not specified' then 'Dose and timing are both missing.'\n            when frequency = 'Frequency not specified' then 'Timing is missing from the active medication record.'\n            when prescriber = 'Prescriber not listed' then 'Ordering provider is missing.'\n            when as_needed then 'Verify PRN indication and patient instructions.'\n            when start_date is not null and start_date < current_date - interval '8 years' then 'Long-running therapy should be confirmed during reconciliation.'\n            else 'No immediate medication issue detected.'\n        end as \"Why\",\n        case\n            when regimen_count > 1 then 0\n            when frequency = 'Frequency not specified' and dose_details = 'Dose not specified' then 1\n            when frequency = 'Frequency not specified' then 2\n            when prescriber = 'Prescriber not listed' then 3\n            when as_needed then 4\n            when start_date is not null and start_date < current_date - interval '8 years' then 5\n            else 6\n        end as sort_rank\n    from med_base\n)\nselect \"Review\", \"Medication\", \"Sig\", \"Prescriber\", \"Started\", \"Stops\", \"Why\"\nfrom review_rows\norder by sort_rank, \"Started\" desc nulls last, \"Medication\"\nlimit 40\n)\nselect * from data\nunion all\nselect 'None', 'No active medications recorded', NULL, NULL, NULL::date, NULL::date, NULL\nwhere not exists (select 1 from data);",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "type": "table",
+      "title": "Medication Safety Alerts",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "healthcare-postgres"
+      },
+      "pluginVersion": "12.4.3",
+      "gridPos": {
+        "h": 6,
+        "w": 10,
+        "x": 14,
+        "y": 12
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Severity"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "High": {
+                        "text": "High",
+                        "color": "red"
+                      },
+                      "Medium": {
+                        "text": "Medium",
+                        "color": "yellow"
+                      },
+                      "Low": {
+                        "text": "Low",
+                        "color": "green"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "custom.width",
+                "value": 90
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Alert"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 190
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Evidence"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 260
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Suggested Action"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 260
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "cellHeight": "md",
+        "showHeader": true,
+        "footer": {
+          "show": false,
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ]
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "healthcare-postgres"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "with data as (with active_meds as (\n    select distinct\n        lower(nullif(trim(coalesce(m.description, m.code)), '')) as med_name,\n        nullif(trim(coalesce(m.description, m.code)), '') as display_name\n    from medications m\n    join patients p on p.id = m.patient_id\n    where p.golden_id = '${golden_id}'\n      and nullif(trim(coalesce(m.description, m.code)), '') is not null\n      and (\n        coalesce(m.status, 'active') not in ('stopped', 'cancelled', 'entered-in-error')\n        or m.stop_date is null\n        or m.stop_date >= current_date\n      )\n),\nactive_allergies as (\n    select distinct\n        lower(coalesce(a.description, a.code)) as allergy_name,\n        coalesce(a.description, a.code) as allergy_display\n    from allergies a\n    join patients p on p.id = a.patient_id\n    where p.golden_id = '${golden_id}'\n      and coalesce(a.clinical_status, 'active') = 'active'\n),\nmed_pairs as (\n    select\n        least(m1.display_name, m2.display_name) as med_left,\n        greatest(m1.display_name, m2.display_name) as med_right,\n        m1.med_name as left_norm,\n        m2.med_name as right_norm\n    from active_meds m1\n    join active_meds m2 on m1.display_name < m2.display_name\n)\nselect * from (\n    select\n        'High' as \"Severity\",\n        'Penicillin allergy conflict' as \"Alert\",\n        string_agg(distinct a.allergy_display || ' + ' || m.display_name, '; ' order by a.allergy_display || ' + ' || m.display_name) as \"Evidence\",\n        'Avoid penicillin-class therapy and verify alternatives before ordering.' as \"Suggested Action\"\n    from active_allergies a\n    join active_meds m on true\n    where a.allergy_name ~* 'penicillin'\n      and m.med_name ~* '(penicillin|amoxicillin|ampicillin|dicloxacillin|clavulanate)'\n    having count(*) > 0\n\n    union all\n\n    select\n        'High',\n        'Major bleeding risk',\n        string_agg(distinct med_left || ' + ' || med_right, '; ' order by med_left || ' + ' || med_right),\n        'Review anticoagulant, antiplatelet, and NSAID combination before continuing therapy.'\n    from med_pairs\n    where (left_norm ~* '\\mwarfarin\\M' and right_norm ~* '(aspirin|clopidogrel|ibuprofen|naproxen)')\n       or (right_norm ~* '\\mwarfarin\\M' and left_norm ~* '(aspirin|clopidogrel|ibuprofen|naproxen)')\n    having count(*) > 0\n\n    union all\n\n    select\n        'High',\n        'Opioid combination review',\n        string_agg(distinct med_left || ' + ' || med_right, '; ' order by med_left || ' + ' || med_right),\n        'Multiple opioid therapies are active; verify intent and overdose risk.'\n    from med_pairs\n    where left_norm ~* '(fentanyl|tramadol|hydrocodone|oxycodone|codeine|morphine)'\n      and right_norm ~* '(fentanyl|tramadol|hydrocodone|oxycodone|codeine|morphine)'\n    having count(*) > 0\n\n    union all\n\n    select\n        'Medium',\n        'Duplicate statin therapy',\n        string_agg(distinct med_left || ' + ' || med_right, '; ' order by med_left || ' + ' || med_right),\n        'Confirm only one statin regimen should remain active.'\n    from med_pairs\n    where left_norm ~* '(simvastatin|atorvastatin|rosuvastatin|pravastatin|lovastatin)'\n      and right_norm ~* '(simvastatin|atorvastatin|rosuvastatin|pravastatin|lovastatin)'\n    having count(*) > 0\n\n    union all\n\n    select\n        'Medium',\n        'Duplicate rescue inhaler review',\n        string_agg(distinct med_left || ' + ' || med_right, '; ' order by med_left || ' + ' || med_right),\n        'Multiple albuterol products are active; verify patient instructions and duplication.'\n    from med_pairs\n    where left_norm ~* '(albuterol|ventolin|proair|proventil)'\n      and right_norm ~* '(albuterol|ventolin|proair|proventil)'\n    having count(*) > 0\n) alerts) select * from data union all select 'Low', 'No active medication safety alerts', NULL, NULL where not exists (select 1 from data);",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "type": "table",
+      "title": "Allergy Safety Profile",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "healthcare-postgres"
+      },
+      "pluginVersion": "12.4.3",
+      "gridPos": {
+        "h": 6,
+        "w": 10,
+        "x": 14,
+        "y": 18
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Reaction Severity"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "Severe": {
+                        "text": "Severe",
+                        "color": "red"
+                      },
+                      "Moderate": {
+                        "text": "Moderate",
+                        "color": "yellow"
+                      },
+                      "Mild": {
+                        "text": "Mild",
+                        "color": "green"
+                      },
+                      "Unknown": {
+                        "text": "Unknown",
+                        "color": "blue"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "custom.width",
+                "value": 110
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Criticality"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "High": {
+                        "text": "High",
+                        "color": "red"
+                      },
+                      "Low": {
+                        "text": "Low",
+                        "color": "yellow"
+                      },
+                      "Unable-To-Assess": {
+                        "text": "Assess",
+                        "color": "blue"
+                      },
+                      "Unknown": {
+                        "text": "Unknown",
+                        "color": "blue"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "custom.width",
+                "value": 90
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Allergy"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 180
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Reaction"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 180
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Safety Note"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 220
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "cellHeight": "md",
+        "showHeader": true,
+        "footer": {
+          "show": false,
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ]
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "healthcare-postgres"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "with data as (\nselect recorded_date::date as \"Recorded\", allergy as \"Allergy\", reaction as \"Reaction\", reaction_severity as \"Reaction Severity\", criticality as \"Criticality\", safety_note as \"Safety Note\"\nfrom provider_allergy_details\nwhere golden_id = '${golden_id}'\norder by case reaction_severity when 'Severe' then 0 when 'Moderate' then 1 when 'Mild' then 2 else 3 end, recorded_date desc nulls last, allergy\nlimit 25\n)\nselect * from data\nunion all\nselect NULL::date, 'No active allergies recorded', NULL, NULL, NULL, NULL\nwhere not exists (select 1 from data);",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "type": "table",
+      "title": "Active Care Plans",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "healthcare-postgres"
+      },
+      "pluginVersion": "12.4.3",
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 24
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Status"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "Active": {
+                        "text": "Active",
+                        "color": "green"
+                      },
+                      "Completed": {
+                        "text": "Completed",
+                        "color": "blue"
+                      },
+                      "Confirmed": {
+                        "text": "Confirmed",
+                        "color": "green"
+                      },
+                      "Final": {
+                        "text": "Final",
+                        "color": "green"
+                      },
+                      "High": {
+                        "text": "High",
+                        "color": "red"
+                      },
+                      "Medium": {
+                        "text": "Medium",
+                        "color": "yellow"
+                      },
+                      "Low": {
+                        "text": "Low",
+                        "color": "green"
+                      },
+                      "Historical": {
+                        "text": "Historical",
+                        "color": "blue"
+                      },
+                      "Review Needed": {
+                        "text": "Review",
+                        "color": "yellow"
+                      },
+                      "Unique Record": {
+                        "text": "Unique",
+                        "color": "blue"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "custom.width",
+                "value": 90
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Plan"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 260
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Next Step"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 300
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "cellHeight": "md",
+        "showHeader": true,
+        "footer": {
+          "show": false,
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ]
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "healthcare-postgres"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "with data as (\nselect distinct\n    initcap(coalesce(cp.category, 'care plan')) as \"Category\",\n    left(cp.description, 90) as \"Plan\",\n    initcap(coalesce(cp.status, 'active')) as \"Status\",\n    cp.start_date::date as \"Started\",\n    left(coalesce(cp.activity_summary, ''), 120) as \"Next Step\"\nfrom care_plans cp\njoin patients p on p.id = cp.patient_id\nwhere p.golden_id = '${golden_id}'\n  and coalesce(cp.status, 'active') in ('active', 'draft', 'on-hold')\norder by \"Started\" desc nulls last, \"Plan\"\nlimit 25\n)\nselect * from data\nunion all\nselect 'Care plan', 'No active care plans recorded', NULL, NULL::date, NULL\nwhere not exists (select 1 from data);",
+          "refId": "A"
+        }
+      ]
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 41,
+  "style": "dark",
+  "tags": [
+    "healthcare",
+    "provider",
+    "patient-360"
+  ],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "00063ef7-9c99-7c6c-cfc2-32d2ec33b7be",
+          "value": "00063ef7-9c99-7c6c-cfc2-32d2ec33b7be"
+        },
+        "description": "Paste a golden_id from the provider search or patient directory.",
+        "hide": 0,
+        "label": "Golden ID",
+        "name": "golden_id",
+        "options": [],
+        "query": "00063ef7-9c99-7c6c-cfc2-32d2ec33b7be",
+        "skipUrlSync": false,
+        "type": "textbox"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-5y",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Patient 360 Meds & Allergies",
+  "uid": "patient-360-medications",
+  "version": 6
+}

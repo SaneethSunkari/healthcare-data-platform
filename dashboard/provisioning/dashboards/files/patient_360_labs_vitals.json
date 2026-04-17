@@ -1,0 +1,1063 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [
+    {
+      "title": "Summary",
+      "url": "/d/patient-360-overview/patient-360-summary",
+      "type": "link",
+      "icon": "dashboard",
+      "includeVars": true,
+      "keepTime": true,
+      "targetBlank": false,
+      "asDropdown": false,
+      "tags": []
+    },
+    {
+      "title": "Meds & Allergies",
+      "url": "/d/patient-360-medications/patient-360-meds-and-allergies",
+      "type": "link",
+      "icon": "dashboard",
+      "includeVars": true,
+      "keepTime": true,
+      "targetBlank": false,
+      "asDropdown": false,
+      "tags": []
+    },
+    {
+      "title": "Labs & Vitals",
+      "url": "/d/patient-360-labs-vitals/patient-360-labs-and-vitals",
+      "type": "link",
+      "icon": "dashboard",
+      "includeVars": true,
+      "keepTime": true,
+      "targetBlank": false,
+      "asDropdown": false,
+      "tags": []
+    },
+    {
+      "title": "Problems",
+      "url": "/d/patient-360-problems/patient-360-problems",
+      "type": "link",
+      "icon": "dashboard",
+      "includeVars": true,
+      "keepTime": true,
+      "targetBlank": false,
+      "asDropdown": false,
+      "tags": []
+    },
+    {
+      "title": "Timeline",
+      "url": "/d/patient-360-timeline/patient-360-timeline",
+      "type": "link",
+      "icon": "dashboard",
+      "includeVars": true,
+      "keepTime": true,
+      "targetBlank": false,
+      "asDropdown": false,
+      "tags": []
+    },
+    {
+      "title": "Population Health Overview",
+      "url": "/d/population-health-overview/population-health-overview",
+      "type": "link",
+      "icon": "dashboard",
+      "includeVars": false,
+      "keepTime": true,
+      "targetBlank": false,
+      "asDropdown": false,
+      "tags": []
+    }
+  ],
+  "panels": [
+    {
+      "id": 1,
+      "type": "text",
+      "title": "Provider Navigation",
+      "gridPos": {
+        "h": 3,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "pluginVersion": "12.4.3",
+      "options": {
+        "content": "**Provider Workspace**  \n[Summary](/d/patient-360-overview/patient-360-summary) | [Meds & Allergies](/d/patient-360-medications/patient-360-meds-and-allergies) | [Labs & Vitals](/d/patient-360-labs-vitals/patient-360-labs-and-vitals) | [Problems](/d/patient-360-problems/patient-360-problems) | [Timeline](/d/patient-360-timeline/patient-360-timeline)  \nPaste a `golden_id` in the field above to load a patient-focused view.",
+        "mode": "markdown"
+      },
+      "transparent": true
+    },
+    {
+      "id": 2,
+      "type": "table",
+      "title": "Clinical Snapshot",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "healthcare-postgres"
+      },
+      "pluginVersion": "12.4.3",
+      "gridPos": {
+        "h": 4,
+        "w": 24,
+        "x": 0,
+        "y": 3
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Patient Name(s)"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 220
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Readmission Risk"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "Active": {
+                        "text": "Active",
+                        "color": "green"
+                      },
+                      "Completed": {
+                        "text": "Completed",
+                        "color": "blue"
+                      },
+                      "Confirmed": {
+                        "text": "Confirmed",
+                        "color": "green"
+                      },
+                      "Final": {
+                        "text": "Final",
+                        "color": "green"
+                      },
+                      "High": {
+                        "text": "High",
+                        "color": "red"
+                      },
+                      "Medium": {
+                        "text": "Medium",
+                        "color": "yellow"
+                      },
+                      "Low": {
+                        "text": "Low",
+                        "color": "green"
+                      },
+                      "Historical": {
+                        "text": "Historical",
+                        "color": "blue"
+                      },
+                      "Review Needed": {
+                        "text": "Review",
+                        "color": "yellow"
+                      },
+                      "Unique Record": {
+                        "text": "Unique",
+                        "color": "blue"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "custom.width",
+                "value": 120
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "cellHeight": "md",
+        "showHeader": true,
+        "footer": {
+          "show": false,
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ]
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "healthcare-postgres"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "select p.golden_id as \"Golden ID\", string_agg(distinct trim(concat_ws(' ', p.first_name, p.last_name)), ' | ' order by trim(concat_ws(' ', p.first_name, p.last_name))) as \"Patient Name(s)\", min(p.birth_date)::date as \"Birth Date\", max(date_part('year', age(p.birth_date)))::int as \"Age\", max(p.gender) as \"Gender\", string_agg(distinct p.zip_code, ', ' order by p.zip_code) as \"ZIP Codes\", string_agg(distinct p.source_system, ', ' order by p.source_system) as \"Source Systems\", count(distinct p.id) as \"Linked Records\", coalesce((select rr.readmission_risk from analytics.readmission_risk rr where rr.golden_id = p.golden_id limit 1), 'low') as \"Readmission Risk\", max(e.start_date)::date as \"Last Visit Date\" from patients p left join encounters e on e.patient_id = p.id where p.golden_id = '${golden_id}' group by p.golden_id;",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "Latest A1c",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "healthcare-postgres"
+      },
+      "pluginVersion": "12.4.3",
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 0,
+        "y": 7
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "healthcare-postgres"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "select round(o.value_numeric::numeric, 2) as latest_a1c from observations o join patients p on p.id = o.patient_id where p.golden_id = '${golden_id}' and coalesce(o.description, o.code) ilike 'Hemoglobin A1c%' and o.value_numeric is not null order by o.effective_at desc nulls last limit 1;",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "stat",
+      "title": "Latest Systolic",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "healthcare-postgres"
+      },
+      "pluginVersion": "12.4.3",
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 6,
+        "y": 7
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "healthcare-postgres"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "select round(o.value_numeric::numeric, 0) as systolic_bp from observations o join patients p on p.id = o.patient_id where p.golden_id = '${golden_id}' and coalesce(o.description, o.code) = 'Systolic Blood Pressure' and o.value_numeric is not null order by o.effective_at desc nulls last limit 1;",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "type": "stat",
+      "title": "Latest Diastolic",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "healthcare-postgres"
+      },
+      "pluginVersion": "12.4.3",
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 12,
+        "y": 7
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "healthcare-postgres"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "select round(o.value_numeric::numeric, 0) as diastolic_bp from observations o join patients p on p.id = o.patient_id where p.golden_id = '${golden_id}' and coalesce(o.description, o.code) = 'Diastolic Blood Pressure' and o.value_numeric is not null order by o.effective_at desc nulls last limit 1;",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "type": "stat",
+      "title": "Abnormal Labs",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "healthcare-postgres"
+      },
+      "pluginVersion": "12.4.3",
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 18,
+        "y": 7
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "healthcare-postgres"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "select count(*) from (with latest_labs as (select o.effective_at::date as \"Collected\", coalesce(o.description, o.code) as \"Lab\", coalesce(nullif(o.value_text, ''), trim(concat(coalesce(o.value_numeric::text, ''), ' ', coalesce(o.value_unit, '')))) as \"Result\", initcap(coalesce(nullif(o.interpretation, ''), case when coalesce(o.description, o.code) ilike 'Hemoglobin A1c%' and coalesce(o.value_numeric, 0) >= 6.5 then 'high' when coalesce(o.description, o.code) ilike 'Cholesterol in LDL%' and coalesce(o.value_numeric, 0) >= 130 then 'high' else 'normal' end)) as \"Flag\" from observations o join patients p on p.id = o.patient_id where p.golden_id = '${golden_id}' and lower(coalesce(o.category, '')) like '%laboratory%') select * from latest_labs where \"Flag\" <> 'Normal' order by \"Collected\" desc nulls last, \"Lab\" ) abnormal_labs;",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "type": "timeseries",
+      "title": "Blood Pressure Trend",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "healthcare-postgres"
+      },
+      "pluginVersion": "12.4.3",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 12
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 12,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 4,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "pressuremmHg"
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "healthcare-postgres"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "select o.effective_at as time, max(case when coalesce(o.description, o.code) = 'Systolic Blood Pressure' then o.value_numeric end) as \"Systolic\", max(case when coalesce(o.description, o.code) = 'Diastolic Blood Pressure' then o.value_numeric end) as \"Diastolic\" from observations o join patients p on p.id = o.patient_id where p.golden_id = '${golden_id}' and coalesce(o.description, o.code) in ('Systolic Blood Pressure', 'Diastolic Blood Pressure') group by o.effective_at order by time;",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "type": "timeseries",
+      "title": "A1c Trend",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "healthcare-postgres"
+      },
+      "pluginVersion": "12.4.3",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 12
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 12,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 4,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "healthcare-postgres"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "select o.effective_at as time, o.value_numeric as \"A1c %\" from observations o join patients p on p.id = o.patient_id where p.golden_id = '${golden_id}' and coalesce(o.description, o.code) ilike 'Hemoglobin A1c%' and o.value_numeric is not null order by time;",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "type": "table",
+      "title": "Abnormal / Priority Labs",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "healthcare-postgres"
+      },
+      "pluginVersion": "12.4.3",
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 20
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Flag"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "High": {
+                        "text": "High",
+                        "color": "red"
+                      },
+                      "Low": {
+                        "text": "Low",
+                        "color": "yellow"
+                      },
+                      "Normal": {
+                        "text": "Normal",
+                        "color": "green"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "custom.width",
+                "value": 90
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Lab"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 240
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "cellHeight": "md",
+        "showHeader": true,
+        "footer": {
+          "show": false,
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ]
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "healthcare-postgres"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "with data as (\nwith latest_labs as (\n    select distinct on (coalesce(o.description, o.code))\n        o.effective_at::date as \"Collected\",\n        coalesce(o.description, o.code) as \"Lab\",\n        coalesce(nullif(o.value_text, ''), trim(concat(coalesce(o.value_numeric::text, ''), ' ', coalesce(o.value_unit, '')))) as \"Result\",\n        case\n            when coalesce(o.description, o.code) ilike 'Hemoglobin A1c%' and coalesce(o.value_numeric, 0) >= 8 then 'High'\n            when coalesce(o.description, o.code) ilike 'Hemoglobin A1c%' and coalesce(o.value_numeric, 0) >= 6.5 then 'Borderline'\n            when coalesce(o.description, o.code) ilike 'Cholesterol in LDL%' and coalesce(o.value_numeric, 0) >= 160 then 'High'\n            when coalesce(o.description, o.code) ilike 'Cholesterol in LDL%' and coalesce(o.value_numeric, 0) >= 130 then 'Borderline'\n            when coalesce(o.description, o.code) ilike 'Glomerular filtration rate%' and coalesce(o.value_numeric, 999) < 30 then 'Critical'\n            when coalesce(o.description, o.code) ilike 'Glomerular filtration rate%' and coalesce(o.value_numeric, 999) < 60 then 'High'\n            when coalesce(o.description, o.code) ilike 'Creatinine%' and coalesce(o.value_numeric, 0) >= 1.5 then 'High'\n            when coalesce(o.description, o.code) ilike 'Glucose%' and coalesce(o.value_numeric, 0) >= 200 then 'High'\n            when coalesce(o.description, o.code) ilike 'Hemoglobin%' and coalesce(o.value_numeric, 999) < 10 then 'High'\n            when coalesce(o.description, o.code) ilike 'Potassium%' and (coalesce(o.value_numeric, 4.0) < 3.5 or coalesce(o.value_numeric, 4.0) > 5.3) then 'High'\n            when coalesce(o.description, o.code) ilike 'Sodium%' and (coalesce(o.value_numeric, 140.0) < 130 or coalesce(o.value_numeric, 140.0) > 150) then 'High'\n            else 'Normal'\n        end as \"Flag\",\n        case\n            when coalesce(o.description, o.code) ilike 'Hemoglobin A1c%' then 'Diabetes control'\n            when coalesce(o.description, o.code) ilike 'Cholesterol in LDL%' then 'Cardiovascular risk'\n            when coalesce(o.description, o.code) ilike 'Glomerular filtration rate%' or coalesce(o.description, o.code) ilike 'Creatinine%' then 'Renal function'\n            when coalesce(o.description, o.code) ilike 'Glucose%' then 'Metabolic status'\n            when coalesce(o.description, o.code) ilike 'Hemoglobin%' then 'Anemia screening'\n            when coalesce(o.description, o.code) ilike 'Potassium%' or coalesce(o.description, o.code) ilike 'Sodium%' then 'Electrolytes'\n            else 'Clinical review'\n        end as \"Clinical Focus\",\n        case\n            when coalesce(o.description, o.code) ilike 'Hemoglobin A1c%' then 'Review diabetic regimen and follow-up interval.'\n            when coalesce(o.description, o.code) ilike 'Cholesterol in LDL%' then 'Review statin therapy and adherence.'\n            when coalesce(o.description, o.code) ilike 'Glomerular filtration rate%' or coalesce(o.description, o.code) ilike 'Creatinine%' then 'Review renal dosing and kidney disease monitoring.'\n            when coalesce(o.description, o.code) ilike 'Glucose%' then 'Assess acute glycemic symptoms and medications.'\n            when coalesce(o.description, o.code) ilike 'Hemoglobin%' then 'Consider anemia workup or repeat CBC.'\n            when coalesce(o.description, o.code) ilike 'Potassium%' or coalesce(o.description, o.code) ilike 'Sodium%' then 'Assess medication and fluid/electrolyte causes.'\n            else 'Review in clinical context.'\n        end as \"Suggested Follow-up\"\n    from observations o\n    join patients p on p.id = o.patient_id\n    where p.golden_id = '${golden_id}'\n      and lower(coalesce(o.category, '')) like '%laboratory%'\n      and coalesce(o.description, o.code) ~* '(Hemoglobin A1c|Cholesterol in LDL|Creatinine|Glomerular filtration rate|Glucose|Hemoglobin|Potassium|Sodium|Leukocytes|Platelets|Calcium|Carbon dioxide)'\n    order by coalesce(o.description, o.code), o.effective_at desc nulls last\n)\nselect * from latest_labs\nwhere \"Flag\" <> 'Normal'\norder by case \"Flag\" when 'Critical' then 0 when 'High' then 1 when 'Borderline' then 2 else 3 end, \"Collected\" desc nulls last, \"Lab\"\nlimit 20\n)\nselect * from data\nunion all\nselect NULL::date, 'No abnormal labs flagged', NULL, 'Normal', NULL, NULL\nwhere not exists (select 1 from data);",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "type": "table",
+      "title": "Key Vitals",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "healthcare-postgres"
+      },
+      "pluginVersion": "12.4.3",
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 20
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Flag"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "High": {
+                        "text": "High",
+                        "color": "red"
+                      },
+                      "Low": {
+                        "text": "Low",
+                        "color": "yellow"
+                      },
+                      "Normal": {
+                        "text": "Normal",
+                        "color": "green"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "custom.width",
+                "value": 90
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Vital"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 220
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "cellHeight": "md",
+        "showHeader": true,
+        "footer": {
+          "show": false,
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ]
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "healthcare-postgres"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "with data as (\nwith ranked_vitals as (\n    select distinct on (coalesce(o.description, o.code))\n        coalesce(o.description, o.code) as \"Vital\",\n        coalesce(nullif(o.value_text, ''), trim(concat(coalesce(o.value_numeric::text, ''), ' ', coalesce(o.value_unit, '')))) as \"Latest Value\",\n        case\n            when coalesce(o.description, o.code) = 'Systolic Blood Pressure' and coalesce(o.value_numeric, 0) >= 140 then 'High'\n            when coalesce(o.description, o.code) = 'Diastolic Blood Pressure' and coalesce(o.value_numeric, 0) >= 90 then 'High'\n            when coalesce(o.description, o.code) = 'Body mass index (BMI) [Ratio]' and coalesce(o.value_numeric, 0) >= 30 then 'High'\n            when coalesce(o.description, o.code) = 'Heart rate' and (coalesce(o.value_numeric, 0) >= 100 or coalesce(o.value_numeric, 999) < 50) then 'High'\n            when coalesce(o.description, o.code) = 'Body temperature' and coalesce(o.value_numeric, 0) >= 38 then 'High'\n            else 'Normal'\n        end as \"Flag\",\n        case\n            when coalesce(o.description, o.code) in ('Systolic Blood Pressure', 'Diastolic Blood Pressure') then 'Assess trend and treatment response.'\n            when coalesce(o.description, o.code) = 'Body mass index (BMI) [Ratio]' then 'Use with nutrition and activity counseling.'\n            when coalesce(o.description, o.code) = 'Heart rate' then 'Review symptoms, rhythm, and medications if persistent.'\n            when coalesce(o.description, o.code) = 'Body temperature' then 'Correlate with infection symptoms.'\n            else 'Monitor in clinical context.'\n        end as \"Clinical Note\",\n        o.effective_at::date as \"Recorded\"\n    from observations o\n    join patients p on p.id = o.patient_id\n    where p.golden_id = '${golden_id}'\n      and lower(coalesce(o.category, '')) like '%vital%'\n      and coalesce(o.description, o.code) in (\n        'Systolic Blood Pressure',\n        'Diastolic Blood Pressure',\n        'Body mass index (BMI) [Ratio]',\n        'Heart rate',\n        'Respiratory rate',\n        'Body temperature',\n        'Body Weight'\n      )\n    order by coalesce(o.description, o.code), o.effective_at desc nulls last\n)\nselect * from ranked_vitals\norder by\n    case \"Vital\"\n        when 'Systolic Blood Pressure' then 0\n        when 'Diastolic Blood Pressure' then 1\n        when 'Heart rate' then 2\n        when 'Body mass index (BMI) [Ratio]' then 3\n        when 'Body Weight' then 4\n        when 'Respiratory rate' then 5\n        when 'Body temperature' then 6\n        else 7\n    end,\n    \"Recorded\" desc nulls last\n)\nselect * from data\nunion all\nselect 'No vitals recorded', NULL, NULL, NULL, NULL::date\nwhere not exists (select 1 from data);",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "type": "table",
+      "title": "Key Recent Labs",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "healthcare-postgres"
+      },
+      "pluginVersion": "12.4.3",
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 29
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Flag"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "High": {
+                        "text": "High",
+                        "color": "red"
+                      },
+                      "Low": {
+                        "text": "Low",
+                        "color": "yellow"
+                      },
+                      "Normal": {
+                        "text": "Normal",
+                        "color": "green"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "custom.width",
+                "value": 90
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Lab"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 260
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "cellHeight": "md",
+        "showHeader": true,
+        "footer": {
+          "show": false,
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ]
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "healthcare-postgres"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "with data as (\nselect\n    o.effective_at::date as \"Collected\",\n    coalesce(o.description, o.code) as \"Lab\",\n    coalesce(nullif(o.value_text, ''), trim(concat(coalesce(o.value_numeric::text, ''), ' ', coalesce(o.value_unit, '')))) as \"Result\",\n    case\n        when coalesce(o.description, o.code) ilike 'Hemoglobin A1c%%' and coalesce(o.value_numeric, 0) >= 6.5 then 'High'\n        when coalesce(o.description, o.code) ilike 'Cholesterol in LDL%%' and coalesce(o.value_numeric, 0) >= 130 then 'High'\n        when coalesce(o.description, o.code) ilike 'Glomerular filtration rate%%' and coalesce(o.value_numeric, 999) < 60 then 'High'\n        when coalesce(o.description, o.code) ilike 'Creatinine%%' and coalesce(o.value_numeric, 0) >= 1.5 then 'High'\n        when coalesce(o.description, o.code) ilike 'Glucose%%' and coalesce(o.value_numeric, 0) >= 200 then 'High'\n        when coalesce(o.description, o.code) ilike 'Hemoglobin%%' and coalesce(o.value_numeric, 999) < 10 then 'Low'\n        else initcap(coalesce(nullif(o.interpretation, ''), 'normal'))\n    end as \"Flag\"\nfrom observations o\njoin patients p on p.id = o.patient_id\nwhere p.golden_id = '${golden_id}'\n  and lower(coalesce(o.category, '')) like '%laboratory%'\n  and coalesce(o.description, o.code) ~* '(Hemoglobin A1c|Cholesterol in LDL|Creatinine|Glomerular filtration rate|Glucose|Hemoglobin|Potassium|Sodium|Leukocytes|Platelets|Calcium|Carbon dioxide)'\norder by o.effective_at desc nulls last, \"Lab\"\nlimit 25\n)\nselect * from data\nunion all\nselect NULL::date, 'No recent labs recorded', NULL, NULL\nwhere not exists (select 1 from data);",
+          "refId": "A"
+        }
+      ]
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 41,
+  "style": "dark",
+  "tags": [
+    "healthcare",
+    "provider",
+    "patient-360"
+  ],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "00063ef7-9c99-7c6c-cfc2-32d2ec33b7be",
+          "value": "00063ef7-9c99-7c6c-cfc2-32d2ec33b7be"
+        },
+        "description": "Paste a golden_id from the provider search or patient directory.",
+        "hide": 0,
+        "label": "Golden ID",
+        "name": "golden_id",
+        "options": [],
+        "query": "00063ef7-9c99-7c6c-cfc2-32d2ec33b7be",
+        "skipUrlSync": false,
+        "type": "textbox"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-5y",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Patient 360 Labs & Vitals",
+  "uid": "patient-360-labs-vitals",
+  "version": 3
+}
