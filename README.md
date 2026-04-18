@@ -18,7 +18,7 @@ This repository shows what a modern healthcare data product can look like when t
 - ingest fragmented FHIR data into a clean warehouse
 - link duplicate patient identities into a unified record
 - protect sensitive data with role-aware masking and audit logging
-- give providers a patient-searchable 360 view with a deterministic handoff summary
+- give providers a patient-searchable 360 view with a clinician-friendly handoff summary built from longitudinal patient history
 - power population health dashboards and governed AI queries
 
 It is a strong MVP and product demo built on synthetic data. It is not presented as a certified production hospital system, but it is intentionally designed around real healthcare failure modes and the workflows that matter most.
@@ -31,9 +31,13 @@ It is a strong MVP and product demo built on synthetic data. It is not presented
 
 ### Provider Workspace
 
-| Patient 360 summary | Medication reconciliation and alerts |
+The provider summary is one of the highest-value product surfaces in this repo. It turns past encounters, medication history, allergies, abnormal labs, care gaps, and recent acute-care utilization into a short handoff before the clinician has to read raw tables.
+
+That is a strong use of AI-style summarization in healthcare: compress the history, keep it readable, and make every statement traceable back to structured patient data. In this repo, the handoff summary is intentionally grounded in warehouse facts so providers get speed without a black-box diagnosis.
+
+| Provider handoff summary | Medication reconciliation and alerts |
 |---|---|
-| ![Patient 360 summary](docs/images/patient-360-summary.png) | ![Patient 360 medications](docs/images/patient-360-medications.png) |
+| ![Provider handoff summary](docs/images/patient-360-summary.png) | ![Patient 360 medications](docs/images/patient-360-medications.png) |
 
 ## Why This Product Matters
 
@@ -77,7 +81,7 @@ A patient sees a PCP, a specialist, and an urgent care center. No one sees the f
 How the platform helps:
 
 - the patient 360 workspace consolidates visits, meds, labs, conditions, care plans, and reports
-- a provider handoff summary turns the raw chart into a concise clinical story
+- a provider handoff summary turns encounter history, medication history, allergies, and utilization into a concise clinical story
 - medication reconciliation and safety alerts flag review needs
 - population dashboards surface high-risk cohorts for proactive outreach
 - governed AI queries make the warehouse easier to explore without exposing raw data broadly
@@ -115,7 +119,8 @@ flowchart LR
 ### Provider workflows
 
 - search by `golden_id`, name, DOB, ZIP, or source identifier
-- read a provider handoff summary with snapshot, top problems, safety signals, recent context, and suggested next steps
+- read a provider handoff summary generated from past encounters, medication history, allergies, labs, and recent utilization
+- use the summary to understand snapshot, top problems, safety signals, recent context, and suggested next steps before opening raw detail tables
 - open a patient 360 summary focused on visits, risk, meds, allergies, care gaps, and acute utilization
 - review medication reconciliation and safety alerts
 - drill into labs, vitals, problems, and timeline views
