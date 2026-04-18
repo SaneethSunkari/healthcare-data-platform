@@ -436,6 +436,94 @@
       ]
     },
     {
+      "id": 16,
+      "type": "table",
+      "title": "Provider Handoff Summary",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "healthcare-postgres"
+      },
+      "pluginVersion": "12.4.3",
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 12
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Section"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 250
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Summary"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 1100
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "cellHeight": "md",
+        "showHeader": true,
+        "footer": {
+          "show": false,
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ]
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "healthcare-postgres"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "with profile as (\n    select\n        max(date_part('year', age(p.birth_date)))::int as age,\n        max(p.gender) as gender\n    from patients p\n    where p.golden_id = '${golden_id}'\n),\nutilization as (\n    select\n        count(distinct e.id) filter (where e.start_date >= now() - interval '12 months') as visits_12m,\n        coalesce((select rr.readmission_risk from analytics.readmission_risk rr where rr.golden_id = '${golden_id}' limit 1), 'low') as readmission_risk\n    from encounters e\n    join patients p on p.id = e.patient_id\n    where p.golden_id = '${golden_id}'\n),\nmeds as (\n    select count(distinct nullif(trim(coalesce(m.description, m.code)), '')) as current_meds\n    from medications m\n    join patients p on p.id = m.patient_id\n    where p.golden_id = '${golden_id}'\n      and nullif(trim(coalesce(m.description, m.code)), '') is not null\n      and (\n        coalesce(m.status, 'active') not in ('stopped', 'cancelled', 'entered-in-error')\n        or m.stop_date is null\n        or m.stop_date >= current_date\n      )\n),\nallergies as (\n    select\n        count(*) filter (where coalesce(a.clinical_status, 'active') = 'active') as active_allergies,\n        count(*) filter (\n            where coalesce(a.clinical_status, 'active') = 'active'\n              and lower(coalesce(a.description, a.code, '')) ~* 'penicillin'\n        ) as penicillin_allergies\n    from allergies a\n    join patients p on p.id = a.patient_id\n    where p.golden_id = '${golden_id}'\n),\nacute as (\n    select *\n    from provider_acute_care_summary\n    where golden_id = '${golden_id}'\n),\nproblems as (\n    select string_agg(problem, '; ' order by last_seen desc nulls last, problem) as top_problems\n    from (\n        select\n            c.description as problem,\n            max(c.onset_date) as last_seen,\n            count(*) as occurrences\n        from conditions c\n        join patients p on p.id = c.patient_id\n        where p.golden_id = '${golden_id}'\n          and c.description is not null\n          and c.description !~* '(medication review due|full-time employment|part-time employment|not in labor force|employment status|social isolation|limited social contact|received higher education|educated to high school level|has a criminal record)'\n        group by c.description\n        order by max(c.onset_date) desc nulls last, count(*) desc, c.description\n        limit 2\n    ) ranked_problems\n),\nlab_focus as (\n    select lab_summary\n    from (\n        select\n            coalesce(o.effective_at, o.issued_at) as observed_at,\n            case\n                when coalesce(o.description, o.code) ilike 'Glomerular filtration rate%' and coalesce(o.value_numeric, 999) < 30 then 0\n                when coalesce(o.description, o.code) ilike 'Hemoglobin A1c%' and coalesce(o.value_numeric, 0) >= 8 then 1\n                when coalesce(o.description, o.code) ilike 'Cholesterol in LDL%' and coalesce(o.value_numeric, 0) >= 130 then 2\n                when coalesce(o.description, o.code) ilike 'Creatinine%' and coalesce(o.value_numeric, 0) >= 1.5 then 3\n                else 4\n            end as sort_order,\n            case\n                when coalesce(o.description, o.code) ilike 'Hemoglobin A1c%' then 'A1c '\n                when coalesce(o.description, o.code) ilike 'Glomerular filtration rate%' then 'eGFR '\n                when coalesce(o.description, o.code) ilike 'Cholesterol in LDL%' then 'LDL '\n                when coalesce(o.description, o.code) ilike 'Creatinine%' then 'Creatinine '\n                else coalesce(o.description, o.code) || ' '\n            end || coalesce(\n                nullif(o.value_text, ''),\n                trim(concat(coalesce(o.value_numeric::text, ''), ' ', coalesce(o.value_unit, '')))\n            ) as lab_summary\n        from observations o\n        join patients p on p.id = o.patient_id\n        where p.golden_id = '${golden_id}'\n          and lower(coalesce(o.category, '')) like '%laboratory%'\n          and (\n            (coalesce(o.description, o.code) ilike 'Hemoglobin A1c%' and coalesce(o.value_numeric, 0) >= 6.5)\n            or (coalesce(o.description, o.code) ilike 'Cholesterol in LDL%' and coalesce(o.value_numeric, 0) >= 130)\n            or (coalesce(o.description, o.code) ilike 'Glomerular filtration rate%' and coalesce(o.value_numeric, 999) < 60)\n            or (coalesce(o.description, o.code) ilike 'Creatinine%' and coalesce(o.value_numeric, 0) >= 1.5)\n          )\n        order by sort_order, observed_at desc nulls last\n        limit 1\n    ) ranked_labs\n),\ngap_focus as (\n    select care_gap, suggested_action, sort_order\n    from provider_care_gaps\n    where golden_id = '${golden_id}'\n    order by sort_order, care_gap\n    limit 1\n),\nnext_steps as (\n    select string_agg(suggested_action, ' | ' order by sort_order, care_gap) as actions\n    from (\n        select care_gap, suggested_action, sort_order\n        from provider_care_gaps\n        where golden_id = '${golden_id}'\n        order by sort_order, care_gap\n        limit 2\n    ) ranked_gaps\n),\nrecent as (\n    select\n        e.start_date::date as encounter_date,\n        coalesce(e.encounter_type, 'Encounter') as encounter_type,\n        coalesce(e.provider, 'Unknown') as provider\n    from encounters e\n    join patients p on p.id = e.patient_id\n    where p.golden_id = '${golden_id}'\n    order by e.start_date desc nulls last\n    limit 1\n)\nselect section as \"Section\", summary as \"Summary\"\nfrom (\n    select\n        1 as sort_order,\n        'Snapshot' as section,\n        trim(concat(\n            coalesce((select age::text || upper(left(gender, 1)) from profile), 'Patient'),\n            ', ',\n            coalesce((select readmission_risk from utilization), 'low'),\n            ' risk, ',\n            coalesce((select visits_12m::text from utilization), '0'),\n            ' visits/12m, ',\n            coalesce((select acute_visits_90d::text from acute), '0'),\n            ' acute/90d, ',\n            coalesce((select current_meds::text from meds), '0'),\n            ' meds, ',\n            coalesce((select active_allergies::text from allergies), '0'),\n            ' allergies.'\n        )) as summary\n    union all\n    select\n        2,\n        'Top Active Problems',\n        coalesce('Top problems: ' || (select top_problems from problems) || '.', 'No high-signal active problem list surfaced.')\n    union all\n    select\n        3,\n        'Key Safety Signals',\n        case\n            when coalesce((select penicillin_allergies from allergies), 0) > 0\n              or coalesce((select acute_visits_90d from acute), 0) >= 3\n              or (select care_gap from gap_focus) is not null\n              or (select lab_summary from lab_focus) is not null\n            then 'Key signals: ' || concat_ws('; ',\n                case when coalesce((select penicillin_allergies from allergies), 0) > 0 then 'penicillin allergy' end,\n                case when coalesce((select acute_visits_90d from acute), 0) >= 3 then coalesce((select acute_visits_90d::text from acute), '0') || ' acute visits/90d' end,\n                (select care_gap from gap_focus),\n                (select lab_summary from lab_focus)\n            ) || '.'\n            else 'No immediate high-priority safety signal from the current rules.'\n        end\n    union all\n    select\n        4,\n        'Recent Context',\n        case\n            when (select encounter_date from recent) is not null or (select last_acute_visit from acute) is not null\n            then concat_ws(' ',\n                case when (select encounter_date from recent) is not null then 'Last encounter: ' || (select encounter_type from recent) || ' on ' || (select encounter_date::text from recent) || '.' end,\n                case when (select provider from recent) is not null and (select provider from recent) <> 'Unknown' then 'Provider: ' || (select provider from recent) || '.' end,\n                case when (select last_acute_visit from acute) is not null and coalesce((select last_acute_setting from acute), '') <> 'No acute encounter documented' then 'Last acute care: ' || lower(coalesce((select last_acute_setting from acute), 'acute care')) || ' on ' || (select last_acute_visit::date::text from acute) || '.' end\n            )\n            else 'Recent clinical context is limited in the connected records.'\n        end\n    union all\n    select\n        5,\n        'Suggested Next Steps',\n        coalesce('Next: ' || (select actions from next_steps), 'Next: Continue routine provider review with the current chart context.')\n) handoff_summary\norder by sort_order;",
+          "refId": "A"
+        }
+      ]
+    },
+    {
       "id": 3,
       "type": "stat",
       "title": "Readmission Risk",
@@ -448,7 +536,7 @@
         "h": 5,
         "w": 4,
         "x": 0,
-        "y": 12
+        "y": 18
       },
       "fieldConfig": {
         "defaults": {
@@ -532,7 +620,7 @@
         "h": 5,
         "w": 4,
         "x": 4,
-        "y": 12
+        "y": 18
       },
       "fieldConfig": {
         "defaults": {
@@ -593,7 +681,7 @@
         "h": 5,
         "w": 4,
         "x": 8,
-        "y": 12
+        "y": 18
       },
       "fieldConfig": {
         "defaults": {
@@ -654,7 +742,7 @@
         "h": 5,
         "w": 4,
         "x": 12,
-        "y": 12
+        "y": 18
       },
       "fieldConfig": {
         "defaults": {
@@ -715,7 +803,7 @@
         "h": 5,
         "w": 4,
         "x": 16,
-        "y": 12
+        "y": 18
       },
       "fieldConfig": {
         "defaults": {
@@ -776,7 +864,7 @@
         "h": 5,
         "w": 4,
         "x": 20,
-        "y": 12
+        "y": 18
       },
       "fieldConfig": {
         "defaults": {
@@ -845,7 +933,7 @@
         "h": 8,
         "w": 10,
         "x": 0,
-        "y": 17
+        "y": 23
       },
       "fieldConfig": {
         "defaults": {
@@ -1009,7 +1097,7 @@
         "h": 8,
         "w": 14,
         "x": 10,
-        "y": 17
+        "y": 23
       },
       "fieldConfig": {
         "defaults": {
@@ -1153,7 +1241,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 25
+        "y": 31
       },
       "fieldConfig": {
         "defaults": {
@@ -1269,7 +1357,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 25
+        "y": 31
       },
       "fieldConfig": {
         "defaults": {
@@ -1385,7 +1473,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 33
+        "y": 39
       },
       "fieldConfig": {
         "defaults": {
@@ -1573,7 +1661,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 33
+        "y": 39
       },
       "fieldConfig": {
         "defaults": {
@@ -1748,5 +1836,5 @@
   "timezone": "browser",
   "title": "Patient 360 Summary",
   "uid": "patient-360-overview",
-  "version": 6
+  "version": 9
 }

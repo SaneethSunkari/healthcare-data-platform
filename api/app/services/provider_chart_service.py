@@ -53,6 +53,188 @@ def _fetch_all(connection, sql: str, params: Any) -> list[dict[str, Any]]:
     return _serialize_rows([dict(row) for row in rows])
 
 
+def _as_int(value: Any) -> int:
+    try:
+        if value is None:
+            return 0
+        return int(value)
+    except (TypeError, ValueError):
+        return 0
+
+
+def _format_date_label(value: Any) -> str | None:
+    if isinstance(value, datetime):
+        return value.date().isoformat()
+    if isinstance(value, date):
+        return value.isoformat()
+    if isinstance(value, str) and value:
+        return value[:10]
+    return None
+
+
+def _natural_join(values: list[str]) -> str:
+    cleaned = [value.strip() for value in values if isinstance(value, str) and value.strip()]
+    if not cleaned:
+        return ""
+    if len(cleaned) == 1:
+        return cleaned[0]
+    if len(cleaned) == 2:
+        return f"{cleaned[0]} and {cleaned[1]}"
+    return f"{', '.join(cleaned[:-1])}, and {cleaned[-1]}"
+
+
+def build_provider_handoff_summary(chart: dict[str, Any]) -> dict[str, Any]:
+    profile = chart.get("profile", {}) or {}
+    summary = chart.get("summary", {}) or {}
+    emergency_snapshot = chart.get("emergency_snapshot", {}) or {}
+    acute_care_summary = chart.get("acute_care_summary", {}) or {}
+    active_problems = chart.get("active_problems", []) or []
+    care_gaps = chart.get("care_gaps", []) or []
+    medication_alerts = chart.get("medication_safety_alerts", []) or []
+    abnormal_labs = chart.get("abnormal_labs", []) or []
+    recent_encounters = chart.get("recent_encounters", []) or []
+
+    age = profile.get("age")
+    gender = str(profile.get("gender") or "patient").lower()
+    readmission_risk = str(summary.get("readmission_risk") or "low").lower()
+    visits_12m = _as_int(summary.get("visits_12m"))
+    acute_visits_90d = _as_int(acute_care_summary.get("acute_visits_90d"))
+    current_meds = _as_int(summary.get("active_medication_count"))
+    active_allergies = _as_int(emergency_snapshot.get("active_allergy_count"))
+    admissions_365d = _as_int(acute_care_summary.get("admissions_365d"))
+    high_alert_count = _as_int(emergency_snapshot.get("high_alert_count"))
+
+    descriptor = "Patient"
+    if age and gender != "patient":
+        descriptor = f"{age}-year-old {gender}"
+    elif age:
+        descriptor = f"{age}-year-old patient"
+    elif gender != "patient":
+        descriptor = f"{gender.title()} patient"
+
+    top_problems = [row.get("problem") for row in active_problems[:3] if row.get("problem")]
+    problem_summary = (
+        f"Most important active problems are {_natural_join(top_problems)}."
+        if top_problems
+        else "No high-signal active problem list was surfaced from the connected records."
+    )
+
+    safety_signals: list[str] = []
+    if emergency_snapshot.get("penicillin_allergy_count"):
+        safety_signals.append("penicillin allergy on record")
+    if high_alert_count > 0:
+        safety_signals.append(f"{high_alert_count} medication safety alert{'s' if high_alert_count != 1 else ''}")
+    if abnormal_labs:
+        top_lab = abnormal_labs[0]
+        lab_name = top_lab.get("lab_name") or "abnormal lab"
+        result = top_lab.get("result")
+        flag = top_lab.get("flag")
+        lab_summary = lab_name
+        if result:
+            lab_summary = f"{lab_summary} {result}"
+        if flag:
+            lab_summary = f"{lab_summary} ({flag.lower()})"
+        safety_signals.append(f"recent lab concern: {lab_summary}")
+    if acute_visits_90d >= 3:
+        safety_signals.append(f"{acute_visits_90d} acute visits in the last 90 days")
+    if admissions_365d > 0:
+        safety_signals.append(f"{admissions_365d} hospital admission{'s' if admissions_365d != 1 else ''} in the last year")
+    if current_meds >= 10:
+        safety_signals.append(f"polypharmacy with {current_meds} active medications")
+    if active_allergies > 0:
+        safety_signals.append(f"{active_allergies} active allerg{'ies' if active_allergies != 1 else 'y'}")
+    if readmission_risk == "high":
+        safety_signals.append("high readmission risk")
+    elif readmission_risk == "medium":
+        safety_signals.append("medium readmission risk")
+    safety_summary = (
+        f"Priority safety signals include {_natural_join(safety_signals[:4])}."
+        if safety_signals
+        else "No immediate high-priority safety signal was generated from the current rules."
+    )
+
+    last_encounter = recent_encounters[0] if recent_encounters else {}
+    encounter_date = _format_date_label(last_encounter.get("start_date"))
+    encounter_type = last_encounter.get("encounter_type") or acute_care_summary.get("last_acute_setting")
+    encounter_provider = last_encounter.get("provider") or acute_care_summary.get("last_acute_provider")
+    recent_bits: list[str] = []
+    if encounter_date and encounter_type:
+        recent_bits.append(f"last recorded encounter was {encounter_type} on {encounter_date}")
+    elif encounter_date:
+        recent_bits.append(f"last recorded encounter was on {encounter_date}")
+    if encounter_provider and encounter_provider != "Unknown":
+        recent_bits.append(f"most recent provider was {encounter_provider}")
+    if acute_care_summary.get("last_acute_visit"):
+        acute_date = _format_date_label(acute_care_summary.get("last_acute_visit"))
+        acute_setting = acute_care_summary.get("last_acute_setting")
+        if acute_date and acute_setting and acute_setting != "No acute encounter documented":
+            recent_bits.append(f"most recent acute care was {acute_setting.lower()} on {acute_date}")
+    if care_gaps:
+        recent_bits.append(f"current care-gap focus is {care_gaps[0].get('care_gap', 'follow-up review')}")
+    recent_context = (
+        f"Recent clinical context: {_natural_join(recent_bits[:4])}."
+        if recent_bits
+        else "Recent clinical context is limited in the connected records."
+    )
+
+    recommended_actions: list[str] = []
+    for row in care_gaps:
+        action = row.get("suggested_action")
+        if action and action not in recommended_actions:
+            recommended_actions.append(action)
+        if len(recommended_actions) >= 3:
+            break
+    if len(recommended_actions) < 3:
+        for row in medication_alerts:
+            action = row.get("suggested_action")
+            if action and action not in recommended_actions:
+                recommended_actions.append(action)
+            if len(recommended_actions) >= 3:
+                break
+    if len(recommended_actions) < 3:
+        for row in abnormal_labs:
+            action = row.get("suggested_follow_up")
+            if action and action not in recommended_actions:
+                recommended_actions.append(action)
+            if len(recommended_actions) >= 3:
+                break
+    if not recommended_actions:
+        recommended_actions.append("Continue routine provider review with the current chart context.")
+
+    snapshot = (
+        f"{descriptor} with {readmission_risk} readmission risk, {visits_12m} visits in the last 12 months, "
+        f"{acute_visits_90d} acute visits in the last 90 days, {current_meds} active meds, and {active_allergies} active allergies."
+    )
+    next_steps = "Recommended next steps: " + " ".join(
+        f"{idx}. {action}" for idx, action in enumerate(recommended_actions[:3], start=1)
+    )
+
+    rows = [
+        {"section": "Snapshot", "summary": snapshot},
+        {"section": "Most Important Active Problems", "summary": problem_summary},
+        {"section": "Safety And Risk Signals", "summary": safety_summary},
+        {"section": "Recent Clinical Context", "summary": recent_context},
+        {"section": "Suggested Next Steps", "summary": next_steps},
+    ]
+
+    markdown = "\n".join(
+        [
+            f"- **{row['section']}:** {row['summary']}"
+            for row in rows
+        ]
+    )
+
+    return {
+        "snapshot": snapshot,
+        "problem_summary": problem_summary,
+        "safety_summary": safety_summary,
+        "recent_context": recent_context,
+        "recommended_actions": recommended_actions[:3],
+        "rows": rows,
+        "markdown": markdown,
+    }
+
+
 SEARCH_SQL = """
 with search_results as (
     select
@@ -161,6 +343,15 @@ select
         ),
         0
     ) as open_care_plan_count,
+    coalesce(
+        (
+            select count(distinct e.id)
+            from encounters e
+            where e.patient_id in (select id from patient_ids)
+              and e.start_date >= now() - interval '12 months'
+        ),
+        0
+    ) as visits_12m,
     coalesce((select sum(e.cost) from encounters e where e.patient_id in (select id from patient_ids)), 0)::numeric(14, 2) as lifetime_cost,
     (select max(e.start_date) from encounters e where e.patient_id in (select id from patient_ids)) as last_visit,
     coalesce((select rr.readmission_risk from analytics.readmission_risk rr where rr.golden_id = %s limit 1), 'low') as readmission_risk
@@ -1036,6 +1227,7 @@ def get_provider_chart(
         "care_plans": _fetch_all(connection, CARE_PLANS_SQL, (golden_id,)),
         "timeline": _fetch_all(connection, TIMELINE_SQL, (golden_id, golden_id, golden_id, golden_id)),
     }
+    chart["provider_handoff_summary"] = build_provider_handoff_summary(chart)
 
     log_access(
         connection,
