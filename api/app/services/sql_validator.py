@@ -5,6 +5,7 @@ ALLOWED_RELATIONS = {
     "encounter_analytics",
     "condition_analytics",
     "medication_analytics",
+    "risk_analytics",
 }
 
 FORBIDDEN_KEYWORDS = [

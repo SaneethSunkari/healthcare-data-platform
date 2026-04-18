@@ -23,3 +23,12 @@ def test_invalid_relation_is_rejected() -> None:
 
     assert not is_valid
     assert "safe analytics views" in message
+
+
+def test_risk_analytics_relation_is_allowed() -> None:
+    is_valid, message = validate_safe_read_only_sql(
+        "SELECT golden_id, acute_visits_90d FROM risk_analytics WHERE readmission_risk = 'high';"
+    )
+
+    assert is_valid
+    assert message == "Query is valid"

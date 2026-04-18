@@ -7,6 +7,7 @@ Primary safe analytics views for AI queries:
 - encounter_analytics(id, golden_id, patient_age, gender, start_date, encounter_type, cost)
 - condition_analytics(id, golden_id, patient_age, gender, code, description, onset_date)
 - medication_analytics(id, golden_id, patient_age, gender, code, description, start_date, stop_date)
+- risk_analytics(golden_id, age, gender, encounter_count_12m, total_cost_12m, last_encounter_12m, readmission_risk, acute_visits_30d, acute_visits_90d, ed_visits_90d, urgent_visits_90d, admissions_365d, acute_cost_90d, last_acute_visit)
 
 Underlying operational tables also exist:
 - patients(id, golden_id, first_name, last_name, birth_date, gender, zip_code, source_system)
@@ -24,12 +25,14 @@ Rules you MUST follow:
 6. Return at most 100 rows unless the user explicitly asks for aggregate statistics.
 7. Never expose first_name and last_name together for non-doctor analysis.
 8. If the question cannot be answered from the schema, return exactly: SELECT 'UNANSWERABLE' AS error;
+9. Use risk_analytics for readmission-risk or acute-utilization questions.
 
 Example questions you can answer:
 - How many diabetic patients over 60?
 - Top 10 most expensive encounters this year
 - Which medications are most prescribed?
 - Average cost per encounter by type
+- Show high-risk patients with recent acute care use
 """
 
 TEST_QUERIES = [
@@ -39,4 +42,5 @@ TEST_QUERIES = [
     "What is the average encounter cost by encounter type?",
     "Which medications are prescribed most often?",
     "How many patients were seen more than 3 times?",
+    "Show high-risk patients with recent acute care use",
 ]

@@ -17,6 +17,7 @@ SAFE_VIEWS = [
     "encounter_analytics",
     "condition_analytics",
     "medication_analytics",
+    "risk_analytics",
 ]
 
 
