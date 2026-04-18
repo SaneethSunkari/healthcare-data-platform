@@ -172,12 +172,14 @@ Optional custom patient volume:
 docker compose up -d
 ```
 
-| Service | Address | Credentials |
+These are local addresses on the machine running the stack. They are not public internet URLs, and they only work after you start the services locally.
+
+| Service | Local address | Credentials |
 |---|---|---|
 | PostgreSQL | `127.0.0.1:15432` | `postgres / postgres` |
-| Grafana | [http://localhost:3000](http://localhost:3000) | `admin / admin` |
-| API | [http://127.0.0.1:8000](http://127.0.0.1:8000) | header-based role access |
-| API docs | [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs) | same API |
+| Grafana | `http://localhost:3000` | `admin / admin` |
+| API | `http://127.0.0.1:8000` | header-based role access |
+| API docs | `http://127.0.0.1:8000/docs` | same API |
 
 ### 4. Load the warehouse and build analytics
 
@@ -194,12 +196,16 @@ dbt test --project-dir analytics --profiles-dir analytics
 uvicorn api.main:app --reload
 ```
 
-### 6. Open the product
+### 6. Open the local product
 
-- Population dashboard: [http://localhost:3000/d/population-health-overview/population-health-overview](http://localhost:3000/d/population-health-overview/population-health-overview)
-- Provider summary: [http://localhost:3000/d/patient-360-overview/patient-360-summary](http://localhost:3000/d/patient-360-overview/patient-360-summary)
-- Meds and allergies: [http://localhost:3000/d/patient-360-medications/patient-360-meds-and-allergies](http://localhost:3000/d/patient-360-medications/patient-360-meds-and-allergies)
-- API UI: [http://127.0.0.1:8000/ui](http://127.0.0.1:8000/ui)
+After the stack is running on your machine, open these local URLs:
+
+- Population dashboard: `http://localhost:3000/d/population-health-overview/population-health-overview`
+- Provider summary: `http://localhost:3000/d/patient-360-overview/patient-360-summary`
+- Meds and allergies: `http://localhost:3000/d/patient-360-medications/patient-360-meds-and-allergies`
+- API UI: `http://127.0.0.1:8000/ui`
+
+Important: if someone clicks these from GitHub, their browser will try to open their own local machine. These addresses do not expose your running dashboards to the public.
 
 ## Example Questions To Ask
 
