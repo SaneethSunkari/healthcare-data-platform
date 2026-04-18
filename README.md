@@ -19,6 +19,7 @@ This repository shows what a modern healthcare data product can look like when t
 - link duplicate patient identities into a unified record
 - protect sensitive data with role-aware masking and audit logging
 - give providers a patient-searchable 360 view with a clinician-friendly handoff summary built from longitudinal patient history
+- AI-powered provider handoff summary
 - power population health dashboards and governed AI queries
 
 It is a strong MVP and product demo built on synthetic data. It is not presented as a certified production hospital system, but it is intentionally designed around real healthcare failure modes and the workflows that matter most.
