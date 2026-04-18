@@ -18,7 +18,7 @@ This repository shows what a modern healthcare data product can look like when t
 - ingest fragmented FHIR data into a clean warehouse
 - link duplicate patient identities into a unified record
 - protect sensitive data with role-aware masking and audit logging
-- give providers a patient-searchable 360 view
+- give providers a patient-searchable 360 view with a deterministic handoff summary
 - power population health dashboards and governed AI queries
 
 It is a strong MVP and product demo built on synthetic data. It is not presented as a certified production hospital system, but it is intentionally designed around real healthcare failure modes and the workflows that matter most.
@@ -77,6 +77,7 @@ A patient sees a PCP, a specialist, and an urgent care center. No one sees the f
 How the platform helps:
 
 - the patient 360 workspace consolidates visits, meds, labs, conditions, care plans, and reports
+- a provider handoff summary turns the raw chart into a concise clinical story
 - medication reconciliation and safety alerts flag review needs
 - population dashboards surface high-risk cohorts for proactive outreach
 - governed AI queries make the warehouse easier to explore without exposing raw data broadly
@@ -114,6 +115,7 @@ flowchart LR
 ### Provider workflows
 
 - search by `golden_id`, name, DOB, ZIP, or source identifier
+- read a provider handoff summary with snapshot, top problems, safety signals, recent context, and suggested next steps
 - open a patient 360 summary focused on visits, risk, meds, allergies, care gaps, and acute utilization
 - review medication reconciliation and safety alerts
 - drill into labs, vitals, problems, and timeline views
@@ -267,7 +269,7 @@ healthcare-data-platform/
 | Method | Endpoint | Purpose |
 |---|---|---|
 | `GET` | `/patients/search` | search unified patients |
-| `GET` | `/patients/chart/{golden_id}` | provider patient chart |
+| `GET` | `/patients/chart/{golden_id}` | provider patient chart with handoff summary, emergency snapshot, meds, labs, and timeline |
 | `GET` | `/patients/{patient_id}` | role-aware patient access |
 
 ### Schema and tool endpoints
@@ -324,6 +326,7 @@ pytest tests
 
 Current automated coverage includes:
 
+- provider handoff summary generation
 - SQL safety validation
 - security middleware behavior
 - connection resolution defaults
