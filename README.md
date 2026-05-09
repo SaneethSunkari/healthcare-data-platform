@@ -24,6 +24,13 @@ This repository shows what a modern healthcare data product can look like when t
 
 It is a strong MVP and product demo built on synthetic data. It is not presented as a certified production hospital system, but it is intentionally designed around real healthcare failure modes and the workflows that matter most.
 
+## Project Evidence
+
+- [Changelog](CHANGELOG.md) - what has been added across ingestion, matching, dashboards, API safety, and provider workflows
+- [Roadmap](ROADMAP.md) - what would move the platform closer to production readiness
+- [Validation and boundaries](docs/VALIDATION.md) - what is proven with synthetic data and what is not claimed
+- [Tests](tests) - automated coverage for SQL validation, security middleware, connection handling, and provider summaries
+
 ## Product Tour
 
 ### Population Health Command Center
@@ -364,6 +371,8 @@ The next major steps would be:
 - clinically validated drug-interaction logic
 - deployment automation, monitoring, and alerting
 - broader automated coverage for ETL, masking, and matching correctness
+
+The fuller production-readiness plan is in [ROADMAP.md](ROADMAP.md), and the current validation boundaries are documented in [docs/VALIDATION.md](docs/VALIDATION.md).
 
 ## Author
 
